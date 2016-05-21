@@ -3,6 +3,7 @@
 module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'powerbi-embedded-site',
+    podModulePrefix: 'powerbi-embedded-site/pods',
     environment: environment,
     baseURL: '/',
     locationType: 'auto',
