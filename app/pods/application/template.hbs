@@ -1,3 +1,12 @@
-<h2 id="title">Welcome to Ember</h2>
+<h2 id="title">Ember AAD Authentication Test</h2>
+
+<h2>User Status:</h2>
+{{#if session.isAuthenticated}}
+  <button type="button" {{action 'invalidateSession'}}>Logout</button>
+{{else}}
+  <button type="button" {{action 'login'}}>Login</button>
+{{/if}}
+
+<hr />
 
 {{outlet}}
