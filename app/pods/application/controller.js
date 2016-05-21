@@ -8,7 +8,7 @@ export default Ember.Controller.extend({
       this.get('session').invalidate();
     },
     login() {
-      console.log('login');
+      this.get('session').authenticate('authenticator:torii', 'aad');
     }
   }
 });

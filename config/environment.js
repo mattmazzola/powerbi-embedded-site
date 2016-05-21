@@ -17,9 +17,17 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+    
+    torii: {
+      providers: {
+        'aad': {
+          clientId: '7a6c78d0-fa80-4af4-928c-b3e0d30ec728'
+        }
+      }
     }
   };
-
+  
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
