@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import Oauth2Bearer from 'torii/providers/oauth2-bearer';
-import {configurable} from 'torii/configuration';
+import { jwt_decode } from 'ember-cli-jwt-decode';
+import { configurable } from 'torii/configuration';
 
 const {
   computed
@@ -82,6 +83,13 @@ export default Oauth2Bearer.extend({
   },
 
   fetch: function(authData){
+    const idToken = jwt_decode(authData.idToken);
+    const expirationMilliseconds = parseInt(idToken.exp + "000");
+    const currentMilliseconds = (new Date()).getTime();
+    const tenMinutesMilliseconds = 600000;
+
+    if((expirationMilliseconds - currentMilliseconds) > tenMinutesMilliseconds) {
       return authData;
+    }
   }
 });
