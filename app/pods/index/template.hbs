@@ -1,1 +1,33 @@
-<h2>Index</h2>
+<h1>1. Sign in with Azure account {{#if session.isAuthenticated}}<span class="glyphicon glyphicon-ok text-success"></span>{{/if}}</h1> 
+<p>You need to use an account which has an associated Azure subscription.</p>
+<p>
+  {{#if session.isAuthenticated}}
+    Logged in as: {{session.data.authenticated.user.displayName}}
+  {{else}}
+    <button type="button" class="btn btn-lg btn-default"  {{action (route-action 'login')}}>Sign In</button>
+  {{/if}}
+</p>
+
+<h1>2. Create PowerBI Workspace Collection</h1>
+<p>Select a subscription and resource group which you will create the workspace collection within.</p>
+
+<button type="button">Create</button>
+
+<h1>3. Create a Workspace</h1>
+<p></p>
+<button type="button">Create</button>
+
+<h1>4. Upload a Report</h1>
+<p>Select a file from your computer.</p>
+
+<input type="file">
+<button type="button">Upload</button>
+
+<h1>5. Optional: Update Report Credentials</h1>
+<p></p>
+
+<h1>6. Embed Report</h1>
+
+<button type="button">Embed</button>
+
+

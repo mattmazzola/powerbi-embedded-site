@@ -1,12 +1,32 @@
-<h2 id="title">Ember AAD Authentication Test</h2>
-
-<h2>User Status:</h2>
-{{#if session.isAuthenticated}}
-  <button type="button" {{action 'invalidateSession'}}>Logout</button>
-{{else}}
-  <button type="button" {{action 'login'}}>Login</button>
-{{/if}}
-
-<hr />
-
-{{outlet}}
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <p>
+          Microsoft | PowerBI
+        </p>
+      </div>
+      <div class="col-md-8 text-right">
+        {{#if session.isAuthenticated}}
+          {{session.data.authenticated.user.displayName}} <br>
+          {{session.data.authenticated.user.mail}} <br>
+          {{session.data.authenticated.user.jobTitle}} <br>
+          Power BI: {{#if sessionAccount.hasPowerBiLicense}}<span class="glyphicon glyphicon-ok"></span>{{else}}<span class="glyphicon glyphicon-remove"></span>{{/if}}
+          <button type="button" class="btn btn-default" {{action (route-action 'invalidateSession')}}>Sign Out</button>
+        {{else}}
+          <button type="button" class="btn btn-default" {{action (route-action 'login')}}>Sign In</button>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</header>
+<div class="announcements">
+  <div class="container">
+    {{#link-to "index"}}Getting Started{{/link-to}}
+  </div>
+</div>
+<main>
+  <div class="container">
+    {{outlet}}
+  </div>
+</main>
