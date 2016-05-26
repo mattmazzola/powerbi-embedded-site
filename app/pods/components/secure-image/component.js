@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import fetch from "ember-network/fetch";
 
 const {
   Component,
@@ -18,6 +19,7 @@ export default Component.extend({
   src: null,
   width: null,
   height: null,
+  accessToken: null,
 
   // image
   _src: null,
@@ -120,7 +122,22 @@ export default Component.extend({
         Img.addEventListener('error', failed, true);
       }
       
-      Img.src = src;
+      const request = {
+        method: 'GET',
+        headers: {
+          "Authorization": `Bearer ${this.get('accessToken')}`
+        }
+      };
+      
+      fetch(src, request)
+        .then(function(response) {
+          return response.blob();
+        })
+        .then(function(blob) {
+          var objectUrl = URL.createObjectURL(blob);
+          console.log(`objectUrl: ${objectUrl}`);
+          Img.src = objectUrl;
+        });
 
       // image is cached
       if (Img.complete || Img.readyState === 4) {
