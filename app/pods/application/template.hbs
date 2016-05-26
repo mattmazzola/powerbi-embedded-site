@@ -8,11 +8,15 @@
       </div>
       <div class="col-md-8 text-right">
         {{#if session.isAuthenticated}}
-          {{session.data.authenticated.user.displayName}} <br>
-          {{session.data.authenticated.user.mail}} <br>
-          {{session.data.authenticated.user.jobTitle}} <br>
-          Power BI: {{#if sessionAccount.hasPowerBiLicense}}<span class="glyphicon glyphicon-ok"></span>{{else}}<span class="glyphicon glyphicon-remove"></span>{{/if}}
-          <button type="button" class="btn btn-default" {{action (route-action 'invalidateSession')}}>Sign Out</button>
+          <div class="pull-right">
+            {{secure-image src=sessionAccount.photoUrl accessToken=sessionAccount.microsoftGraph.accessToken class="profile-image"}}
+          </div>
+          <div class="pull-right">
+            {{session.data.authenticated.user.displayName}} <br>
+            {{session.data.authenticated.user.mail}} <br>
+            {{session.data.authenticated.user.jobTitle}} <br>
+            Power BI: {{#if sessionAccount.hasPowerBiLicense}}<span class="glyphicon glyphicon-ok"></span>{{else}}<span class="glyphicon glyphicon-remove"></span>{{/if}}
+          </div>
         {{else}}
           <button type="button" class="btn btn-default" {{action (route-action 'login')}}>Sign In</button>
         {{/if}}

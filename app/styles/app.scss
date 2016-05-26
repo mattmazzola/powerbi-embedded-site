@@ -18,6 +18,12 @@ header {
   color: black;
   padding: 2em;
 }
+
+.profile-image {
+  height: 90px;
+  border-radius: 50%;
+  margin-left: 2em;
+}
 nav {
   background-color: black;
   color: white;
@@ -27,8 +33,13 @@ nav {
   a:visited,
   a:hover,
   a:active {
+    display: inline-block;
+    padding: 0 2em;
     color: white;
     text-decoration: none;
+  }
+  a.active {
+    text-decoration: underline;
   }
 }
 main {
@@ -38,4 +49,13 @@ main {
 .text-wrap {
   word-break: break-all;
   word-wrap: break-word;
+}
+
+.jwt-viewer_raw {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.42857143;
+}
+.jwt-viewer_decoded {
+  max-height: 400px;
 }

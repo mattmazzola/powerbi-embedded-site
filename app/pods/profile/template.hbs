@@ -1,26 +1,11 @@
+<button type="button" class="btn btn-default" {{action (route-action 'invalidateSession')}}>Sign Out</button>
+
 <h3>Id Token:</h3>
-<div class="text-wrap">
-  {{session.data.authenticated.idToken}}
-</div>
-{{#copy-button
-    clipboardText=session.data.authenticated.idToken
-    class="btn btn-primary"
-  }}
-    Copy
-  {{/copy-button}}
+{{jwt-viewer accessToken=session.data.authenticated.idToken}}
   
 {{#each session.data.authenticated.resources as |resource|}}
   <h3>{{resource.endpointUri}}</h3>
-  <p>AccessToken:</p>
-  <div class="text-wrap" >
-    {{resource.accessToken}}
-  </div>
-  {{#copy-button
-    clipboardText=resource.accessToken
-    class="btn btn-primary"
-  }}
-    Copy
-  {{/copy-button}}
+  {{jwt-viewer accessToken=resource.accessToken}}
 {{/each}}
 
 
