@@ -1,0 +1,21 @@
+<ul class="nav nav-tabs">
+  <li role="presentation" class="{{if decoded "active"}}"><a {{action "setView" true }}>Decoded</a></li>
+  <li role="presentation" class="{{unless decoded "active"}}"><a {{action "setView" false }}>Raw</a></li>
+</ul>
+{{#if decoded}}
+  <pre class="jwt-viewer_decoded">{{decodedAccessToken}}</pre>
+  {{#copy-button
+    clipboardText=decodedAccessToken
+    class="btn btn-primary"
+  }}
+    Copy Decoded
+  {{/copy-button}}
+{{else}}
+  <div class="well well-sm text-wrap jwt-viewer_raw">{{accessToken}}</div>
+  {{#copy-button
+    clipboardText=accessToken
+    class="btn btn-primary"
+  }}
+    Copy Raw
+  {{/copy-button}}
+{{/if}}
