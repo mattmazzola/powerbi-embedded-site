@@ -2,7 +2,7 @@
 <p>You need to use an account which has an associated Azure subscription.</p>
 <p>
   {{#if session.isAuthenticated}}
-    Logged in as: {{session.data.authenticated.user.displayName}}
+    Logged in as: <b>{{session.data.authenticated.user.displayName}}</b>
   {{else}}
     <button type="button" class="btn btn-lg btn-default"  {{action (route-action 'login')}}>Sign In</button>
   {{/if}}
