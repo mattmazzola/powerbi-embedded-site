@@ -18,11 +18,24 @@ header {
   color: black;
   padding: 2em;
 }
-.announcements {
+nav {
   background-color: black;
   color: white;
   padding: 1em;
+  
+  a:link,
+  a:visited,
+  a:hover,
+  a:active {
+    color: white;
+    text-decoration: none;
+  }
 }
 main {
   padding: 1em 0;
+}
+
+.text-wrap {
+  word-break: break-all;
+  word-wrap: break-word;
 }
