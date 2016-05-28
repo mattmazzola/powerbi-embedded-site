@@ -21,6 +21,11 @@ export default Ember.Service.extend({
     return resources.find(resource => resource.endpointUri === "https://graph.windows.net/");
   }),
   
+  azureManagement: computed('session.data.authenticated.resources', function () {
+    const resources = this.get('session.data.authenticated.resources');
+    return resources.find(resource => resource.endpointUri === "https://management.azure.com/");
+  }),
+  
   hasPowerBiLicense: computed('session.data.authenticated.user.assignedPlans', function() {
     const assignedPlans = this.get('session.data.authenticated.user.assignedPlans');
     
