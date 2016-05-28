@@ -11,6 +11,7 @@
 <h1>2. Create PowerBI Workspace Collection</h1>
 <p>Select a subscription and resource group which you will create the workspace collection within.</p>
 
+<button type="button" {{action (action "loadSubscriptions")}}>Load Subscriptions</button>
 <div class="panel panel-default">
   <div class="panel-heading">Subscriptions</div>
   <table class="table">
@@ -18,20 +19,26 @@
       <tr>
         <th>Id</th>
         <th>Name</th>
+        <th>State</th>
       </tr>
     </thead>
     <tbody>
+      {{#each subscriptions as |subscription|}}
       <tr>
-        <td>1</td>
-        <td>One</td>
+        <td>{{subscription.id}}</td>
+        <td>{{subscription.displayName}}</td>
+        <td>{{subscription.state}}</td>
+        <td><button type="button" {{action (action "selectSubscription" subscription)}}>Select</button></td>
       </tr>
-      <tr>
-        <td>2</td>
-        <td>Two</td>
-      </tr>
+      {{/each}}
     </tbody>
   </table>
 </div>
+
+<p>
+  Selected Subscription: {{selectedSubscription.displayName}}
+</p>
+<button type="button" {{action (action "loadResourceGroups")}}>Load Resource Groups</button>
 
 <div class="panel panel-default">
   <div class="panel-heading">Resource Groups</div>
@@ -43,14 +50,14 @@
       </tr>
     </thead>
     <tbody>
+      {{#each selectedSubscription.resourceGroups as |resourceGroup|}}
       <tr>
-        <td>1</td>
-        <td>One</td>
+        <td>{{resourceGroup.id}}</td>
+        <td>{{resourceGroup.location}}</td>
+        <td>{{subscription.provisioningState}}</td>
+        <td><button type="button" {{action (action "selectResourceGroup" resourceGroup)}}>Select</button></td>
       </tr>
-      <tr>
-        <td>2</td>
-        <td>Two</td>
-      </tr>
+      {{/each}}
     </tbody>
   </table>
 </div>
