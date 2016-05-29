@@ -7,6 +7,10 @@ export default Ember.Controller.extend({
   resourceGroups: null,
   selectedSubscription: null,
   selectedResourceGroup: null,
+  selectedWorkspaceCollection: null,
+  selectedWorkspace: null,
+  
+  workspaceCollectionName: null,
   
   actions: {
     loadSubscriptions() {
@@ -27,6 +31,14 @@ export default Ember.Controller.extend({
     
     selectResourceGroup(resourceGroup) {
       this.set('selectedResourceGroup', resourceGroup);
+    },
+    
+    selectWorkspaceCollection(workspaceCollection) {
+      this.set('selectedWorkspaceCollection', workspaceCollection);
+    },
+    
+    selectWorkspace(workspace) {
+      this.set('selectedWorkspace', workspace);
     }
   }
 });

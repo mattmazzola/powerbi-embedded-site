@@ -11,6 +11,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     },
     login() {
       this.get('session').authenticate('authenticator:torii', 'aad');
+    },
+    createWorkspaceCollection(name) {
+      console.log('workspaceCollection: ', name);
     }
   }
 });
