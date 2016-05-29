@@ -1,4 +1,3 @@
-import Ember from 'ember';
 import SubscriptionAdapter from './subscription';
 
 export default SubscriptionAdapter.extend({
@@ -45,39 +44,6 @@ export default SubscriptionAdapter.extend({
     
     url += `?api-version=2016-01-29`;
     
-    return url;
-  },
-  
-  urlForQuery(query, modelName, id) {
-    var url = [];
-    var host = Ember.get(this, 'host');
-    var prefix = this.urlPrefix();
-    var path;
-
-    url.push(query.subscription.get('id'));
-    query.subscription = null;
-    delete query.subscription;
-    
-    if (modelName) {
-      const camelized = Ember.String.camelize(modelName);
-      path = Ember.String.pluralize(camelized);
-      if (path) {
-        url.push(path);
-      }
-    }
-
-    if (id) {
-      url.push(encodeURIComponent(id));
-    }
-    if (prefix) {
-      url.unshift(prefix);
-    }
-
-    url = url.join('/');
-    if (!host && url && url.charAt(0) !== '/') {
-      url = '/' + url;
-    }
-
     return url;
   }
 });
