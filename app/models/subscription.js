@@ -6,5 +6,6 @@ export default Model.extend({
   displayName: attr('string'),
   subscriptionId: attr('string'),
   state: attr('string'),
-  resourceGroups: hasMany('resourceGroup', { async: true })
+  
+  resourceGroups: hasMany('resourceGroup')
 });

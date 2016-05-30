@@ -1,6 +1,6 @@
 import Model from 'ember-data/model';
 import attr from 'ember-data/attr';
-import { hasMany } from 'ember-data/relationships';
+import { hasMany, belongsTo } from 'ember-data/relationships';
 
 export default Model.extend({
   name: attr('string'),
@@ -11,5 +11,6 @@ export default Model.extend({
   skuname: attr('string'),
   skutier: attr('string'),
   
-  workspaces: hasMany('workspace', { async: true })
+  workspaces: hasMany('workspace'),
+  resourceGroup: belongsTo('resourceGroup')
 });
