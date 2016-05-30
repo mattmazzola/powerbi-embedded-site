@@ -25,7 +25,8 @@ export default RESTSerializer.extend({
       });
       
     resourceHash.links = {
-      workspaces: `${resourceHash.id}/workspaces?api-version=2016-01-29`
+      workspaces: `${resourceHash.id}/workspaces?api-version=2016-01-29`,
+      accessKeys: `${resourceHash.id}/listKeys?api-version=2016-01-29`
     };
     
     let data = null;

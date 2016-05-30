@@ -45,5 +45,13 @@ export default SubscriptionAdapter.extend({
     url += `?api-version=2016-01-29`;
     
     return url;
+  },
+  
+  findBelongsTo(store, snapshot, url, relationship) {
+    var id   = snapshot.id;
+    var type = snapshot.modelName;
+
+    url = this.urlPrefix(url, this.buildURL(type, id, snapshot, 'findBelongsTo'));
+    return this.ajax(url, 'POST');
   }
 });

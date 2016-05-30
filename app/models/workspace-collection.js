@@ -11,6 +11,7 @@ export default Model.extend({
   skuname: attr('string'),
   skutier: attr('string'),
   
+  accessKeys: belongsTo('accessKey'),
   workspaces: hasMany('workspace'),
   resourceGroup: belongsTo('resourceGroup')
 });
