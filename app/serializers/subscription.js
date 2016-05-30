@@ -1,10 +1,10 @@
-import JSONSerializer from 'ember-data/serializers/json';
+import RESTSerializer from 'ember-data/serializers/rest';
 
-export default JSONSerializer.extend({
+export default RESTSerializer.extend({
   primaryKey: 'subscriptionId',
   
   normalizeFindAllResponse(store, primaryModelClass, payload, id, requestType) {
-    const args = [store, primaryModelClass, payload.value, id, requestType];
+    const args = [store, primaryModelClass, { subscriptions: payload.value }, id, requestType];
     return this.normalizeArrayResponse(...args);
   },
   
