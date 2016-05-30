@@ -39,20 +39,84 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
       console.log('workspaceCollection: ', request);
       
       return fetch(request.url, request)
-        .then(response => response.json())
-        .then(newWorkspaceCollection => {
-          console.log('newWorkspaceCollection: ', newWorkspaceCollection);
-          
-          this.store.pushPayload('workspaceCollection', {
-            workspaceCollections: [
-              newWorkspaceCollection
-            ]
-          });
-          
-          const id = newWorkspaceCollection.name;
-          const newWorkspaceCollectionModel = this.store.peekRecord('workspaceCollection', id);
-          newWorkspaceCollectionModel.set('resourceGroup', data.resourceGroup);
-          data.resourceGroup.get('workspaceCollections').pushObject(newWorkspaceCollectionModel);
+        .then(response => {
+          if(response.ok) {
+            return response.json()
+              .then(newWorkspaceCollection => {
+                console.log('newWorkspaceCollection: ', newWorkspaceCollection);
+                
+                this.store.pushPayload('workspaceCollection', {
+                  workspaceCollections: [
+                    newWorkspaceCollection
+                  ]
+                });
+                
+                const id = newWorkspaceCollection.name;
+                const newWorkspaceCollectionModel = this.store.peekRecord('workspaceCollection', id);
+                newWorkspaceCollectionModel.set('resourceGroup', data.resourceGroup);
+                data.resourceGroup.get('workspaceCollections').pushObject(newWorkspaceCollectionModel);
+              });
+          }
+        });
+    },
+    
+    createWorkspace(data) {
+      const createProvisionTokenRequest = {
+        url: 'http://localhost:1249/api/generateprovisiontoken',
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          workspaceCollectionName: data.workspaceCollection.get('id'),
+          accessKey: data.workspaceCollection.get('accessKeys.key1')
+        })
+      };
+      
+      return fetch(createProvisionTokenRequest.url, createProvisionTokenRequest)
+        .then(response => {
+          if(response.ok) {
+            response.json()
+              .then(provisionToken => {
+                const createWorkspaceRequest = {
+                  url: `${this.get('sessionAccount.powerbi.endpointUri')}/beta/collections/${data.workspaceCollection.get('id')}/workspaces`,
+                  method: 'post',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Authorization': `AppToken ${provisionToken}`
+                  }
+                };
+                
+                return fetch(createWorkspaceRequest.url, createWorkspaceRequest)
+                  .then(response => {
+                    if(response.ok) {
+                      return response.json()
+                        .then(newWorkspace => {
+                          console.log('newWorkspace: ', newWorkspace);
+                          // CamelCase the workspaceId;
+                          newWorkspace.workspaceId = newWorkspace.WorkspaceId;
+                          /**
+                           * Name property exits for response from azure but not from actual service.
+                           * Fake the name here by copying the id.
+                           */
+                          newWorkspace.name = newWorkspace.WorkspaceId;
+                          
+                          this.store.pushPayload('workspace', {
+                            workspaces: [
+                              newWorkspace
+                            ]
+                          });
+                          
+                          const id = newWorkspace.workspaceId;
+                          const newWorkspaceModel = this.store.peekRecord('workspace', id);
+                          newWorkspaceModel.set('workspaceCollection', data.workspaceCollection);
+                          data.workspaceCollection.get('workspaces').pushObject(newWorkspaceModel);
+                        });
+                    }
+                  });
+              });
+          }
         });
     }
   }

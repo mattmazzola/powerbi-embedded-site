@@ -119,9 +119,29 @@
 
 
 <h1>3. Create a Workspace</h1>
+{{#if selectedWorkspaceCollection}}
 <p>
   Selected WorkspaceCollection: {{selectedWorkspaceCollection.id}}
 </p>
+<p>
+  Access Key1: {{selectedWorkspaceCollection.accessKeys.key1}}
+  {{#copy-button
+    clipboardText=selectedWorkspaceCollection.accessKeys.key1
+    class="btn btn-primary"
+  }}
+    Copy Key1
+  {{/copy-button}}
+</p>
+<p>
+  Access Key2: {{selectedWorkspaceCollection.accessKeys.key2}}
+  {{#copy-button
+    clipboardText=selectedWorkspaceCollection.accessKeys.key2
+    class="btn btn-primary"
+  }}
+    Copy Key2
+  {{/copy-button}}
+</p>
+{{/if}}
 <div class="panel panel-default">
   <div class="panel-heading">Workspaces:</div>
   <table class="table">
@@ -145,7 +165,79 @@
     </tbody>
   </table>
 </div>
-<button type="button" class="btn btn-success" disabled={{selectedWorkspace}}>Create new Workspace</button>
+<button type="button" class="btn btn-success" disabled={{not selectedWorkspaceCollection}} {{action (route-action "createWorkspace" (hash workspaceCollection=selectedWorkspaceCollection)) }}>Create new Workspace</button>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Reports:</div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each selectedWorkspace.reports as |report|}}
+        <tr>
+          <td>{{report.id}}</td>
+          <td><button type="button" class="btn btn-primary" {{action (action "selectReport" report)}}>Select</button></td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="2" class="text-center text-danger">No Reports Loaded</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Datasets:</div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each selectedWorkspace.datasets as |dataset|}}
+        <tr>
+          <td>{{dataset.id}}</td>
+          <td><button type="button" class="btn btn-primary" {{action (action "selectDataset" dataset)}}>Select</button></td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="2" class="text-center text-danger">No Datasets Loaded</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Gateways:</div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each selectedWorkspace.gateways as |gateway|}}
+        <tr>
+          <td>{{gateway.id}}</td>
+          <td><button type="button" class="btn btn-primary" {{action (action "selectGateway" gateway)}}>Select</button></td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="2" class="text-center text-danger">No Gateways Loaded</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
 
 <h1>4. Upload a Report</h1>
 <p>
