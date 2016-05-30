@@ -9,15 +9,6 @@ export default RESTSerializer.extend({
   },
   
   normalize(modelClass, resourceHash) {
-    Object.keys(resourceHash.properties)
-      .forEach(key => {
-        resourceHash[key] = resourceHash.properties[key];
-      });
-      
-    // resourceHash.links = {
-    //   workspaces: `${resourceHash.id}/workspaces?api-version=2016-02-01`
-    // };
-    
     let data = null;
 
     if (resourceHash) {
