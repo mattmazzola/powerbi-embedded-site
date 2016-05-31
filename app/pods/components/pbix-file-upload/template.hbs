@@ -1,0 +1,34 @@
+{{#pl-uploader
+  for="upload-pbix"
+  extensions="pbix"
+  onInitOfUploader="onInitOfUploader"
+  onfileadd="uploadPbix"
+  onerror="uploadError"
+  no-duplicates="true"
+  multiple="true"
+  as |queue dropzone|}}
+  <div class="dropzone" id={{dropzone.id}}>
+    {{#if dropzone.active}}
+      {{#if dropzone.valid}}
+        Drop to upload
+      {{else}}
+        Invalid dropzone
+      {{/if}}
+    {{else if queue.length}}
+      <ul>
+        {{#each queue as |file|}}
+          <li>{{file.name}}</li>
+        {{/each}}
+      </ul>
+      Uploading {{queue.length}} files. ({{queue.progress}}%)
+    {{else}}
+      <h4>Upload PBIX files</h4>
+      <p>
+        {{#if dropzone.enabled}}
+          Drag and drop .pbix files onto this area to upload them or
+        {{/if}}
+        <a id="upload-pbix">Add a .pbix file.</a>
+      </p>
+    {{/if}}
+  </div>
+{{/pl-uploader}}
