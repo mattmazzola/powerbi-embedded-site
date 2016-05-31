@@ -243,10 +243,7 @@
 <p>
   Selected Workspace: {{selectedWorkspace.name}}
 </p>
-<p>Select a file from your computer.</p>
-
-<input type="file">
-<button type="button">Upload</button>
+{{#pbix-file-upload workspaceCollection=selectedWorkspaceCollection workspace=selectedWorkspace}}{{/pbix-file-upload}}
 
 <h1>5. Optional: Update Report Credentials</h1>
 <p></p>
