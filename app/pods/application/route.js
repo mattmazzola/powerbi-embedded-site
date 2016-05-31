@@ -36,15 +36,11 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         body: JSON.stringify(workspaceCollection)
       };
       
-      console.log('workspaceCollection: ', request);
-      
       return fetch(request.url, request)
         .then(response => {
           if(response.ok) {
             return response.json()
               .then(newWorkspaceCollection => {
-                console.log('newWorkspaceCollection: ', newWorkspaceCollection);
-                
                 this.store.pushPayload('workspaceCollection', {
                   workspaceCollections: [
                     newWorkspaceCollection
@@ -93,7 +89,6 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                     if(response.ok) {
                       return response.json()
                         .then(newWorkspace => {
-                          console.log('newWorkspace: ', newWorkspace);
                           // CamelCase the workspaceId;
                           newWorkspace.workspaceId = newWorkspace.WorkspaceId;
                           /**
