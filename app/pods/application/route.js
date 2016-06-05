@@ -113,6 +113,59 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
               });
           }
         });
+    },
+    
+    generateProvisionToken(data) {
+      const createProvisionTokenRequest = {
+        url: 'http://localhost:1249/api/generateprovisiontoken',
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          workspaceCollectionName: data.workspaceCollection.get('id'),
+          accessKey: data.workspaceCollection.get('accessKeys.key1')
+        })
+      };
+      
+      return fetch(createProvisionTokenRequest.url, createProvisionTokenRequest)
+        .then(response => {
+          const json = response.json();
+          if(response.ok) {
+            return json;
+          }
+          else {
+            throw json;
+          }
+        });
+    },
+    
+    generateDevToken(data) {
+      const createDevTokenRequest = {
+        url: 'http://localhost:1249/api/generatedevtoken',
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          workspaceCollectionName: data.workspaceCollection.get('id'),
+          workspaceId: data.workspace.get('id'),
+          accessKey: data.workspaceCollection.get('accessKeys.key1')
+        })
+      };
+      
+      return fetch(createDevTokenRequest.url, createDevTokenRequest)
+        .then(response => {
+          const json = response.json();
+          if(response.ok) {
+            return json;
+          }
+          else {
+            throw json;
+          }
+        });
     }
   }
 });

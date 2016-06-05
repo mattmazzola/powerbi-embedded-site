@@ -12,17 +12,30 @@ export default Ember.Controller.extend({
   
   workspaceCollectionName: null,
   
+  provisionTokens: null,
+  
+  init() {
+    this._super();
+    this.set('provisionTokens', []);
+  },
+  
   actions: {
-    loadSubscriptions() {
-      this.set('subscriptions', this.store.findAll('subscription'));
+    generateDevToken(workspace, generateTokenAction) {
+      generateTokenAction()
+        .then(token => {
+          workspace.get('tokens').pushObject(token);
+        })
     },
     
-    loadResourceGroups() {
-      const resourceGroups = this.get('selectedSubscription').get('resourceGroups');
-      
-      console.log(resourceGroups);
-      
-      // this.set('resourceGroups', this.store.query('resourceGroup', { subscription: this.get('selectedSubscription') }));
+    generateProvisionToken(workspaceCollection, generateTokenAction) {
+      generateTokenAction()
+        .then(token => {
+          workspaceCollection.get('tokens').pushObject(token);
+        })
+    },
+    
+    loadSubscriptions() {
+      this.set('subscriptions', this.store.findAll('subscription'));
     },
     
     selectSubscription(subscription) {

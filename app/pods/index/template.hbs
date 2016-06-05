@@ -159,13 +159,38 @@
         </tr>
       {{else}}
         <tr>
-          <td colspan="8" class="text-center text-danger">No Workspaces Loaded</td>
+          <td colspan="2" class="text-center text-danger">No Workspaces Loaded</td>
         </tr>
       {{/each}}
     </tbody>
   </table>
 </div>
 <button type="button" class="btn btn-success" disabled={{not selectedWorkspaceCollection}} {{action (route-action "createWorkspace" (hash workspaceCollection=selectedWorkspaceCollection)) }}>Create new Workspace</button>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Provision Tokens:</div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Token</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each selectedWorkspaceCollection.tokens as |token|}}
+        <tr>
+          <td class="text-wrap">{{token}}</td>
+          <td>{{#copy-button clipboardText=token class="btn btn-primary" }}Copy{{/copy-button}}</td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="2" class="text-center text-danger">No Tokens Created</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+<button type="button" class="btn btn-primary" {{action "generateProvisionToken" selectedWorkspaceCollection (route-action "generateProvisionToken" (hash workspaceCollection=selectedWorkspaceCollection))  }}>Get Provision Token</button>
 
 <div class="panel panel-default">
   <div class="panel-heading">Reports:</div>
@@ -238,6 +263,33 @@
     </tbody>
   </table>
 </div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Dev Tokens:</div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Token</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each selectedWorkspace.tokens as |token|}}
+        <tr>
+          <td class="text-wrap">{{token}}</td>
+          <td>{{#copy-button clipboardText=token class="btn btn-primary" }}Copy{{/copy-button}}</td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="2" class="text-center text-danger">No Tokens Created</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<button type="button" class="btn btn-primary" {{action "generateDevToken" selectedWorkspace (route-action "generateDevToken" (hash workspaceCollection=selectedWorkspaceCollection workspace=selectedWorkspace))  }}>Get Dev Token</button>
+
 
 <h1>4. Upload a Report</h1>
 <p>
