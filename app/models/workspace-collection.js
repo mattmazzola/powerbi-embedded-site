@@ -13,5 +13,12 @@ export default Model.extend({
   
   accessKeys: belongsTo('accessKey'),
   workspaces: hasMany('workspace'),
-  resourceGroup: belongsTo('resourceGroup')
+  resourceGroup: belongsTo('resourceGroup'),
+  
+  tokens: null,
+  
+  init() {
+    this._super();
+    this.set('tokens', []);
+  }
 });

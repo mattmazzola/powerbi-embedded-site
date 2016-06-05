@@ -5,5 +5,12 @@ import { belongsTo } from 'ember-data/relationships';
 export default Model.extend({
   name: attr('string'),
   
-  workspaceCollection: belongsTo('workspaceCollection')
+  workspaceCollection: belongsTo('workspaceCollection'),
+  
+  tokens: null,
+  
+  init() {
+    this._super();
+    this.set('tokens', []);
+  }
 });
