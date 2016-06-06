@@ -59,3 +59,11 @@ main {
 .jwt-viewer_decoded {
   max-height: 400px;
 }
+
+.powerbi-frame {
+  height: 600px;
+  
+  iframe {
+    border: 0;
+  }
+}

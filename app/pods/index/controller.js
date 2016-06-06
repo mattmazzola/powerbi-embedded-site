@@ -1,5 +1,9 @@
 import Ember from 'ember';
 
+const {
+  computed
+} = Ember;
+
 export default Ember.Controller.extend({
   store: Ember.inject.service('store'),
   session: Ember.inject.service('session'),
@@ -16,6 +20,14 @@ export default Ember.Controller.extend({
   workspaceCollectionName: null,
   
   provisionTokens: null,
+  
+  embedConfig: computed('selectedReport', function () {
+    return {
+      type: 'report',
+      embedUrl: this.get('selectedReport.embedUrl'),
+      accessToken: this.get('selectedReport.accessToken')
+    };
+  }),
   
   init() {
     this._super();

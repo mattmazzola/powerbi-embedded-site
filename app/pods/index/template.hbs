@@ -341,9 +341,13 @@
 
 <h1>5. Optional: Update Report Credentials</h1>
 <p></p>
+<p>
+  Selected Report: {{selectedReport.name}}
+</p>
 
 <h1>6. Embed Report</h1>
-
-<button type="button">Embed</button>
+{{#if embedConfig.accessToken.isSettled}}
+  {{powerbi-report embedUrl=embedConfig.embedUrl accessToken=embedConfig.accessToken.content}}
+{{/if}}
 
 
