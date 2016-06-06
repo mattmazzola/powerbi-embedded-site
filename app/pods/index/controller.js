@@ -9,6 +9,9 @@ export default Ember.Controller.extend({
   selectedResourceGroup: null,
   selectedWorkspaceCollection: null,
   selectedWorkspace: null,
+  selectedImport: null,
+  selectedReport: null,
+  selectedDataset: null,
   
   workspaceCollectionName: null,
   
@@ -52,6 +55,18 @@ export default Ember.Controller.extend({
     
     selectWorkspace(workspace) {
       this.set('selectedWorkspace', workspace);
+    },
+    
+    selectReport(report) {
+      this.set('selectedReport', report);
+    },
+    
+    selectImport(anImport) {
+      this.set('selectedImport', anImport);
+    },
+    
+    selectDataset(dataset) {
+      this.set('selectedDataset', dataset);
     }
   }
 });

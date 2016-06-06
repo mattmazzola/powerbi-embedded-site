@@ -193,10 +193,43 @@
 <button type="button" class="btn btn-primary" {{action "generateProvisionToken" selectedWorkspaceCollection (route-action "generateProvisionToken" (hash workspaceCollection=selectedWorkspaceCollection))  }}>Get Provision Token</button>
 
 <div class="panel panel-default">
+  <div class="panel-heading">Imports:</div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Id</th>
+        <th>State</th>
+        <th>Created</th>
+        <th>Updated</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each selectedWorkspace.imports as |import|}}
+        <tr>
+          <td>{{import.name}}</td>
+          <td>{{import.id}}</td>
+          <td>{{import.importState}}</td>
+          <td>{{moment-format import.createdDateTime 'LLL'}}</td>
+          <td>{{moment-format import.updatedDateTime 'LLL'}}</td>
+          <td><button type="button" class="btn btn-primary" {{action (action "selectImport" import)}}>Select</button></td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="6" class="text-center text-danger">No Import Loaded</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="panel panel-default">
   <div class="panel-heading">Reports:</div>
   <table class="table">
     <thead>
       <tr>
+        <th>Name</th>
         <th>Id</th>
         <th>&nbsp;</th>
       </tr>
@@ -204,12 +237,19 @@
     <tbody>
       {{#each selectedWorkspace.reports as |report|}}
         <tr>
+          <td>{{report.name}}</td>
           <td>{{report.id}}</td>
           <td><button type="button" class="btn btn-primary" {{action (action "selectReport" report)}}>Select</button></td>
         </tr>
+        <tr>
+          <td colspan="3">{{report.webUrl}}</td>
+        </tr>
+        <tr>
+          <td colspan="3">{{report.embedUrl}}</td>
+        </tr>
       {{else}}
         <tr>
-          <td colspan="2" class="text-center text-danger">No Reports Loaded</td>
+          <td colspan="3" class="text-center text-danger">No Reports Loaded</td>
         </tr>
       {{/each}}
     </tbody>
@@ -221,6 +261,7 @@
   <table class="table">
     <thead>
       <tr>
+        <th>Name</th>
         <th>Id</th>
         <th>&nbsp;</th>
       </tr>
@@ -228,12 +269,13 @@
     <tbody>
       {{#each selectedWorkspace.datasets as |dataset|}}
         <tr>
+          <td>{{dataset.name}}</td>
           <td>{{dataset.id}}</td>
           <td><button type="button" class="btn btn-primary" {{action (action "selectDataset" dataset)}}>Select</button></td>
         </tr>
       {{else}}
         <tr>
-          <td colspan="2" class="text-center text-danger">No Datasets Loaded</td>
+          <td colspan="3" class="text-center text-danger">No Datasets Loaded</td>
         </tr>
       {{/each}}
     </tbody>
