@@ -27,14 +27,14 @@ export default Ember.Controller.extend({
       generateTokenAction()
         .then(token => {
           workspace.get('tokens').pushObject(token);
-        })
+        });
     },
     
     generateProvisionToken(workspaceCollection, generateTokenAction) {
       generateTokenAction()
         .then(token => {
           workspaceCollection.get('tokens').pushObject(token);
-        })
+        });
     },
     
     loadSubscriptions() {
