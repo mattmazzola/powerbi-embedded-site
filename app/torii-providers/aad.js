@@ -10,6 +10,7 @@ const {
 export default Oauth2Bearer.extend({
   name:    'aad',
   
+  authServer: configurable('authServer', 'http://localhost:1249'),
   // Set url parameters
   baseUrl: computed(function () {
     return `https://login.windows.net/${this.get('tenantId')}/oauth2/authorize`;
@@ -33,7 +34,7 @@ export default Oauth2Bearer.extend({
 
   open: function() {
     return this._super()
-      .then(function(authData){
+      .then((authData) => {
         // If the user hit 'cancel' or closed the pop-up throw error
         if (!authData.authorizationToken) {
           throw new Error('User canceled authorization');
@@ -47,7 +48,7 @@ export default Oauth2Bearer.extend({
           Ember.$.ajax({
             method: 'POST',
             type: 'POST',
-            url: 'http://localhost:1249/api/token',
+            url: `${this.get('authServer')}api/token`,
             headers: {
               'Content-Type': 'application/json'
             },
