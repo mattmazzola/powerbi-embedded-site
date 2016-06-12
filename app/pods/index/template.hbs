@@ -9,114 +9,49 @@
 </p>
 
 <h1>2. Create PowerBI Workspace Collection</h1>
-<p>Select a subscription and resource group which you will create the workspace collection within.</p>
 
 <button type="button" class="btn btn-primary" {{action (action "loadSubscriptions")}} disabled={{not session.isAuthenticated}}>Load Subscriptions</button>
-<div class="panel panel-default">
-  <div class="panel-heading">Subscriptions</div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th class="visible-lg">Id</th>
-        <th class="visible-md visible-lg">State</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each subscriptions as |subscription|}}
-        <tr>
-          <td>{{subscription.displayName}}</td>
-          <td class="visible-lg">{{subscription.id}}</td>
-          <td class="visible-md visible-lg">{{subscription.state}}</td>
-          <td><button type="button" class="btn btn-primary" {{action (action "selectSubscription" subscription)}}>Select</button></td>
-        </tr>
-      {{else}}
-        <tr>
-          <td colspan="4" class="text-center text-danger">No Subscriptions Loaded</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
 
-<p>
-  Selected Subscription: {{selectedSubscription.displayName}}
-</p>
-<div class="panel panel-default">
-  <div class="panel-heading">Resource Groups</div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th class="visible-md visible-lg">Location</th>
-        <th class="visible-lg">State</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each selectedSubscription.resourceGroups as |resourceGroup|}}
-        <tr>
-          <td>{{resourceGroup.id}}</td>
-          <td class="visible-md visible-lg">{{resourceGroup.location}}</td>
-          <td class="visible-lg">{{resourceGroup.provisioningState}}</td>
-          <td><button type="button" class="btn btn-primary" {{action (action "selectResourceGroup" resourceGroup)}}>Select</button></td>
-        </tr>
-      {{else}}
-        <tr>
-          <td colspan="4" class="text-center text-danger">No Resource Groups Loaded</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
+<h3>Select Subscription:</h3>
+{{#power-select
+  selected=selectedSubscription
+  options=subscriptions
+  searchField="displayName"
+  onchange=(action (mut selectedSubscription))
+  as |subscription|}}
+  {{subscription.displayName}} - {{subscription.id}} - {{subscription.state}}
+{{/power-select}}
 
-<p>
-  Selected Resource Group: {{selectedResourceGroup.name}}
-</p>
-<div class="panel panel-default">
-  <div class="panel-heading">Workspace Collections:</div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Location</th>
-        <th class="visible-lg">Created</th>
-        <th class="visible-lg">State</th>
-        <th class="visible-md visible-lg">Status</th>
-        <th class="visible-lg">Tier</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each selectedResourceGroup.workspaceCollections as |workspaceCollection|}}
-        <tr>
-          <td>{{workspaceCollection.id}}</td>
-          <td>{{workspaceCollection.location}}</td>
-          <td class="visible-lg">{{moment-format workspaceCollection.createdDate 'LLL'}}</td>
-          <td class="visible-lg">{{workspaceCollection.provisioningState}}</td>
-          <td class="visible-md visible-lg">{{workspaceCollection.status}}</td>
-          <td class="visible-lg">{{workspaceCollection.skutier}}</td>
-          <td><button type="button" class="btn btn-primary" {{action (action "selectWorkspaceCollection" workspaceCollection)}}>Select</button></td>
-        </tr>
-      {{else}}
-        <tr>
-          <td colspan="8" class="text-center text-danger">No Workspace Collections Loaded</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
+<h3>Select Resource Group:</h3>
+{{#power-select
+  selected=selectedResourceGroup
+  disabled=(not gt selectedSubscription.resourceGroups.length 0)
+  options=selectedSubscription.resourceGroups
+  searchField="id"
+  onchange=(action (mut selectedResourceGroup))
+  as |resourceGroup|}}
+  {{resourceGroup.id}} - {{resourceGroup.location}} - {{resourceGroup.provisioningState}}
+{{/power-select}}
 
+<h3>Select Existing Workspace Collection:</h3>
+{{#power-select
+  selected=selectedWorkspaceCollection
+  options=selectedResourceGroup.workspaceCollections
+  searchField="id"
+  onchange=(action (mut selectedWorkspaceCollection))
+  as |workspaceCollection|}}
+  {{workspaceCollection.id}} - {{workspaceCollection.location}} - {{moment-format workspaceCollection.createdDate 'LLL'}} - {{workspaceCollection.provisioningState}} - {{workspaceCollection.status}} - {{workspaceCollection.skutier}}
+{{/power-select}}
+
+<h3>Create new Workspace Collection:</h3>
 <form {{action (route-action "createWorkspaceCollection" (hash name=workspaceCollectionName subscription=selectedSubscription resourceGroup=selectedResourceGroup)) on="submit" }}>
   <div class="form-group">
     <label for="workspaceCollectionName">Name</label>
-    {{input type="text" class="form-control" id="workspaceCollectionName" placeholder="Workspace Collection Name" value=workspaceCollectionName }}
+    {{input type="text" class="form-control" id="workspaceCollectionName" placeholder="Workspace Collection Name" value=workspaceCollectionName required="required"}}
     <small>Name for workspace collection. E.g. Finance: {{workspaceCollectionName}}</small>
   </div>
   <button type="submit" class="btn btn-success" disabled={{not selectedResourceGroup}}>Create new Workspace Collection</button>
 </form>
-
 
 <h1>3. Create a Workspace</h1>
 {{#if selectedWorkspaceCollection}}
@@ -142,29 +77,18 @@
   {{/copy-button}}
 </p>
 {{/if}}
-<div class="panel panel-default">
-  <div class="panel-heading">Workspaces:</div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each selectedWorkspaceCollection.workspaces as |workspace|}}
-        <tr>
-          <td>{{workspace.id}}</td>
-          <td><button type="button" class="btn btn-primary" {{action (action "selectWorkspace" workspace)}}>Select</button></td>
-        </tr>
-      {{else}}
-        <tr>
-          <td colspan="2" class="text-center text-danger">No Workspaces Loaded</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
+
+<h3>Select Existing Workspace:</h3>
+{{#power-select
+  selected=selectedWorkspace
+  options=selectedWorkspaceCollection.workspaces
+  searchField="id"
+  onchange=(action (mut selectedWorkspace))
+  as |workspace|}}
+  {{workspace.id}}
+{{/power-select}}
+
+<h3>Create new Workspace:</h3>
 <button type="button" class="btn btn-success" disabled={{not selectedWorkspaceCollection}} {{action (route-action "createWorkspace" (hash workspaceCollection=selectedWorkspaceCollection)) }}>Create new Workspace</button>
 
 <div class="panel panel-default">
