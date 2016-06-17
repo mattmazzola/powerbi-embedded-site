@@ -1,0 +1,31 @@
+.pbi-nav-button {
+  display: flex;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #444444;
+  }
+
+  &.active {
+    background-color: #212121;
+  }
+}
+
+.pbi-nav-button__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+
+  .glyphicon {
+    font-size: 20px;
+  }
+}
+.pbi-nav-button__label {
+  flex: 1;
+  line-height: 48px;
+}

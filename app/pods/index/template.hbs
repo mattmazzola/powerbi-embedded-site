@@ -1,8 +1,18 @@
-<h1>1. Sign in with Azure account {{#if session.isAuthenticated}}<span class="glyphicon glyphicon-ok text-success"></span>{{/if}}</h1> 
+<h1>1. Sign in with Azure account {{#if session.isAuthenticated}} {{pbi-icon name="checkmark" size="large" class="text-success"}} {{/if}}</h1> 
 <p>You need to use an account which has an associated Azure subscription.</p>
 <p>
   {{#if session.isAuthenticated}}
-    Logged in as: <b>{{session.data.authenticated.user.displayName}}</b>
+    <div class="clearfix">
+      <div class="pull-left">
+        {{secure-image src=sessionAccount.photoUrl accessToken=sessionAccount.microsoftGraph.accessToken class="profile-image"}}
+      </div>
+      <div class="pull-left">
+        {{session.data.authenticated.user.displayName}} <br>
+        {{session.data.authenticated.user.mail}} <br>
+        {{session.data.authenticated.user.jobTitle}} <br>
+        Power BI License: {{#if sessionAccount.hasPowerBiLicense}} {{pbi-icon name="checkmark" size="small" class="text-success"}} {{/if}}
+      </div>
+    </div>
   {{else}}
     <button type="button" class="btn btn-lg btn-default"  {{action (route-action 'login')}}>Sign In</button>
   {{/if}}

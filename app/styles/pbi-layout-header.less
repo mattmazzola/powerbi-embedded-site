@@ -1,0 +1,30 @@
+.pbi-layout-header {
+  display: flex;
+  height: 48px;
+  background-color: #f8f8f8;
+}
+
+.pbi-layout-header__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+
+  .glyphicon {
+    font-size: 20px;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    &:not(.pbi-layout-header__menu-toggle) {
+      background-color: #e0e0e0;
+    }
+  }
+}
+
+.pbi-layout-header__title {
+  flex: 1;
+  padding: 0.825em;
+  white-space: nowrap;
+}

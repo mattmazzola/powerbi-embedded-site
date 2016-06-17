@@ -1,38 +1,75 @@
-<header>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <p>
-          Microsoft | PowerBI
-        </p>
+<div class="pbi-layout">
+  <header class="pbi-layout__header">
+    <div class="pbi-layout-header">
+      <div class="pbi-layout-header__menu-toggle pbi-layout-header__icon themePrimaryColor" {{action "toggleNavigation"}}>
+        <span class="glyphicon pbi-glyph-globalnavbutton"></span>
       </div>
-      <div class="col-md-8 text-right">
-        {{#if session.isAuthenticated}}
-          <div class="pull-right">
-            {{secure-image src=sessionAccount.photoUrl accessToken=sessionAccount.microsoftGraph.accessToken class="profile-image"}}
+      <div class="pbi-layout-header__title">
+        {{pbi-icon name="powerbi" size="small"}} Microsoft Power BI Embedded
+      </div>
+      
+      <div class="pbi-layout-header__icon pbi-layout-header__fullscreen">
+        <span class="glyphicon pbi-glyph-chromefullscreen"></span>
+      </div>
+      <div class="pbi-layout-header__icon pbi-layout-header__refresh">
+        <span class="glyphicon pbi-glyph-refresh"></span>
+      </div>
+      <div class="pbi-layout-header__icon pbi-layout-header__search">
+        <span class="glyphicon pbi-glyph-search"></span>
+      </div>
+      <div class="pbi-layout-header__icon pbi-layout-header__actions">
+        <span class="glyphicon pbi-glyph-more"></span>
+      </div>
+    </div>
+  </header>
+  <div class="pbi-layout__main">
+    <div class="pbi-layout-main">
+      <div class="pbi-layout-main__nav neutralPrimaryColor">
+        <div class="pbi-nav">
+          <div class="pbi-nav__content neutralPrimaryColor {{if showNavigationLabels 'pbi-nav__content--expanded'}}">
+            <div class="pbi-nav__primary-buttons">
+              <div class="pbi-nav__button-category pbi-nav__button-category--primary">
+                {{#link-to "index" class="pbi-nav-button" tagName="div"}}
+                  <div class="pbi-nav-button__icon">
+                    <span class="glyphicon pbi-glyph-home"></span>
+                  </div>
+                  <div class="pbi-nav-button__label">
+                    Home
+                  </div>
+                {{/link-to}}
+                {{#link-to "browse" class="pbi-nav-button" tagName="div"}}
+                  <div class="pbi-nav-button__icon">
+                    <span class="glyphicon pbi-glyph-folder"></span>
+                  </div>
+                  <div class="pbi-nav-button__label">
+                    Browse
+                  </div>
+                {{/link-to}}
+              </div>
+            </div>
+            <div class="pbi-nav__secondary-buttons">
+            </div>
+            <div class="pbi-nav__footer-buttons">
+              <div class="pbi-nav__button-category">
+                {{#link-to "profile" class="pbi-nav-button" tagName="div"}}
+                  <div class="pbi-nav-button__icon">
+                    <span class="glyphicon pbi-glyph-user"></span>
+                  </div>
+                  <div class="pbi-nav-button__label">
+                    User
+                  </div>
+                {{/link-to}}
+              </div>
+            </div>
           </div>
-          <div class="pull-right">
-            {{session.data.authenticated.user.displayName}} <br>
-            {{session.data.authenticated.user.mail}} <br>
-            {{session.data.authenticated.user.jobTitle}} <br>
-            Power BI License: {{#if sessionAccount.hasPowerBiLicense}}<span class="glyphicon glyphicon-ok text-success"></span>{{else}}<span class="glyphicon glyphicon-remove text-danger"></span>{{/if}}
-          </div>
-        {{else}}
-          <button type="button" class="btn btn-default" {{action (route-action 'login')}}>Sign In</button>
-        {{/if}}
+        </div>
+      </div>
+      <div class="pbi-layout-main__content">
+        <div class="pbi-layout-content">
+          {{outlet}}
+        </div>
       </div>
     </div>
   </div>
-</header>
-<nav>
-  <div class="container">
-    {{#link-to "index"}}Getting Started{{/link-to}}
-    {{#link-to "profile"}}Profile{{/link-to}}
-    {{#link-to "browse"}}Browse{{/link-to}}
-  </div>
-</nav>
-<main>
-  <div class="container">
-    {{outlet}}
-  </div>
-</main>
+</div>
+

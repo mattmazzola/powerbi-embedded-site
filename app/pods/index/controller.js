@@ -7,6 +7,7 @@ const {
 export default Ember.Controller.extend({
   store: Ember.inject.service('store'),
   session: Ember.inject.service('session'),
+  sessionAccount: Ember.inject.service('session-account'),
   subscriptions: null,
   resourceGroups: null,
   selectedSubscription: null,

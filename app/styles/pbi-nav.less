@@ -1,0 +1,30 @@
+.pbi-nav {
+  position: relative;
+  width: 48px;
+}
+.pbi-nav__content {
+  position: absolute;
+  width: 48px;
+  z-index: 100;
+  height: 100%;
+  transition: width ease-in-out 0.2s;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.pbi-nav__content--expanded {
+  width: 300px;
+}
+.pbi-nav__secondary-buttons {
+  flex: 1;
+}
+.pbi-nav__button-category {
+  border-bottom: 1px solid #777;
+}
+
+.pbi-nav__footer-buttons {
+  .pbi-nav__button-category {
+    border-top: 1px solid #777;
+    border-bottom: none;
+  }
+}
