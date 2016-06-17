@@ -8,6 +8,7 @@ const Router = Ember.Router.extend({
 Router.map(function() {
   this.route('profile');
   this.route('login');
+  this.route('browse');
 });
 
 export default Router;
