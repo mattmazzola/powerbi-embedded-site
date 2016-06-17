@@ -27,6 +27,10 @@ module.exports = function(environment) {
           authServer: 'http://powerbiembeddedsite.azurewebsites.net/'
         }
       }
+    },
+
+    powerbi: {
+      apiBaseUri: 'http://powerbiembeddedsite.azurewebsites.net/'
     }
   };
   

@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import fetch from 'ember-network/fetch';
+import config from '../../../config/environment';
 
 const {
   inject
@@ -23,7 +24,7 @@ export default Ember.Component.extend({
       console.log(`pbixFile:`, pbixFile);
       
       const createDevTokenRequest = {
-        url: 'http://localhost:1249/api/generatedevtoken',
+        url: `${config.powerbi.apiBaseUri}api/generatedevtoken`,
         method: 'post',
         headers: {
           'Content-Type': 'application/json',

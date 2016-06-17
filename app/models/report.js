@@ -3,6 +3,7 @@ import fetch from 'ember-network/fetch';
 import Model from 'ember-data/model';
 import attr from 'ember-data/attr';
 import { belongsTo } from 'ember-data/relationships';
+import config from '../config/environment';
 
 const {
   computed
@@ -24,7 +25,7 @@ export default Model.extend({
   
   generateEmbedToken() {
     const createEmbedTokenRequest = {
-      url: 'http://localhost:1249/api/generateembedtoken',
+      url: `${config.powerbi.apiBaseUri}api/generateembedtoken`,
       method: 'post',
       headers: {
         'Content-Type': 'application/json',

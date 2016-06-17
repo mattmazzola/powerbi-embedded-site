@@ -3,6 +3,7 @@ import fetch from 'ember-network/fetch';
 import Model from 'ember-data/model';
 import attr from 'ember-data/attr';
 import { belongsTo, hasMany } from 'ember-data/relationships';
+import config from '../config/environment';
 
 const {
   computed
@@ -26,7 +27,7 @@ export default Model.extend({
   
   generateDevToken() {
     const createDevTokenRequest = {
-      url: 'http://localhost:1249/api/generatedevtoken',
+      url: `${config.powerbi.apiBaseUri}api/generatedevtoken`,
       method: 'post',
       headers: {
         'Content-Type': 'application/json',

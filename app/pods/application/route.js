@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import fetch from "ember-network/fetch";
+import config from '../../config/environment';
 
 export default Ember.Route.extend(ApplicationRouteMixin, {
   session: Ember.inject.service('session'),
@@ -58,7 +59,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     
     createWorkspace(data) {
       const createProvisionTokenRequest = {
-        url: 'http://localhost:1249/api/generateprovisiontoken',
+        url: `${config.powerbi.apiBaseUri}api/generateprovisiontoken`,
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -117,7 +118,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     
     generateProvisionToken(data) {
       const createProvisionTokenRequest = {
-        url: 'http://localhost:1249/api/generateprovisiontoken',
+        url: `${config.powerbi.apiBaseUri}api/generateprovisiontoken`,
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -143,7 +144,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     
     generateDevToken(data) {
       const createDevTokenRequest = {
-        url: 'http://localhost:1249/api/generatedevtoken',
+        url: `${config.powerbi.apiBaseUri}api/generatedevtoken`,
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
