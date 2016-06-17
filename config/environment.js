@@ -24,13 +24,13 @@ module.exports = function(environment) {
         'aad': {
           clientId: '7a6c78d0-fa80-4af4-928c-b3e0d30ec728',
           redirectUri: 'http://localhost:4200/',
-          authServer: 'http://powerbiembeddedsite.azurewebsites.net/'
+          authServer: 'https://powerbiembeddedapi.azurewebsites.net/'
         }
       }
     },
 
     powerbi: {
-      apiBaseUri: 'http://powerbiembeddedsite.azurewebsites.net/'
+      apiBaseUri: 'https://powerbiembeddedapi.azurewebsites.net/'
     }
   };
   
