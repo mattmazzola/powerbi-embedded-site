@@ -7,6 +7,7 @@
     "ember-qunit-notifications": "0.1.0",
     "bootstrap": "~3.3.5",
     "dinosheets": "0.1.1",
-    "powerbi-client": "beta"
+    "powerbi-client": "beta",
+    "fuzzy": "^0.1.1"
   }
 }

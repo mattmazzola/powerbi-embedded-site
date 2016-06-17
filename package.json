@@ -40,6 +40,7 @@
     "ember-composable-helpers": "0.25.0",
     "ember-data": "^2.4.2",
     "ember-export-application-global": "^1.0.5",
+    "ember-fuzzy-shim": "1.0.0",
     "ember-load-initializers": "^0.5.1",
     "ember-moment": "6.1.0",
     "ember-network": "0.3.0",
