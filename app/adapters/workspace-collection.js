@@ -47,7 +47,7 @@ export default SubscriptionAdapter.extend({
     return url;
   },
   
-  findBelongsTo(store, snapshot, url, relationship) {
+  findBelongsTo(store, snapshot, url/*, relationship */) {
     var id   = snapshot.id;
     var type = snapshot.modelName;
 

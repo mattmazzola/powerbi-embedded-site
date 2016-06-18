@@ -13,7 +13,7 @@ export default SubscriptionAdapter.extend({
     };
   },
   
-  findHasMany(store, snapshot, url, relationship) {
+  findHasMany(store, snapshot, url/*, relationship*/) {
     console.log(`workspace#findHasMany`);
     var id   = snapshot.id;
     var type = snapshot.modelName;

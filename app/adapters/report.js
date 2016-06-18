@@ -1,10 +1,4 @@
-import Ember from 'ember';
 import SubscriptionAdapter from './subscription';
-
-const {
-  inject,
-  computed
-} = Ember;
 
 export default SubscriptionAdapter.extend({
   headers() {
@@ -13,7 +7,7 @@ export default SubscriptionAdapter.extend({
     };
   },
   
-  findHasMany(store, snapshot, url, relationship) {
+  findHasMany(store, snapshot, url /*, relationship */) {
     console.log(`report#findHasMany`);
 
     var id   = snapshot.id;

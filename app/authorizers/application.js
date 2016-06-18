@@ -4,7 +4,7 @@ export default OAuth2Bearer.extend({
   authorize(data, block) {
     const accessToken = data['idToken'];
 
-    if (!isEmpty(accessToken)) {
+    if (typeof accessToken === 'string') {
       block('Authorization', `Bearer ${accessToken}`);
     }
   }

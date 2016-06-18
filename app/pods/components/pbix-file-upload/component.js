@@ -57,7 +57,7 @@ export default Ember.Component.extend({
                     console.log(`newImport: `, response);
                     
                     // TODO: Fetch import and related dataset / report and add those models.
-                    const importId = response.body.id;
+                    // const importId = response.body.id;
                     
                     // this.store.pushPayload('workspace', {
                     //   workspaces: [

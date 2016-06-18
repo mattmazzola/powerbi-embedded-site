@@ -1,4 +1,5 @@
 import RESTSerializer from 'ember-data/serializers/rest';
+import Ember from 'ember';
 
 export default RESTSerializer.extend({
   primaryKey: 'workspaceId',
@@ -43,7 +44,7 @@ export default RESTSerializer.extend({
     return { data };
   },
   
-  keyForAttribute(key, method) {
+  keyForAttribute(key/*, method*/) {
     return key;
   }
 });
