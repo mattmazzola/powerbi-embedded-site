@@ -24,7 +24,7 @@ module.exports = function(environment) {
         'aad': {
           clientId: '7a6c78d0-fa80-4af4-928c-b3e0d30ec728',
           redirectUri: 'http://localhost:4200/',
-          authServer: 'https://powerbiembeddedapi.azurewebsites.net/'
+          authServer: 'http://localhost:1249/'
         }
       }
     },
@@ -40,7 +40,7 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.torii.providers.aad.redirectUri = 'https://powerbiembeddedsite.azurewebsites.net/'
+    ENV.torii.providers.aad.redirectUri = 'http://localhost:4200/'
   }
 
   if (environment === 'test') {
