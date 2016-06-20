@@ -9,7 +9,27 @@ const Node = Ember.Object.extend({
   value: null,
   expandable: true,
   expanded: false,
-  nodes: null
+  nodes: null,
+
+  init() {
+    this._super();
+
+    this.set('detailsComponentName', `pbi-${this.get('type')}-details`);
+    this.set('headersComponentName', `pbi-${this.get('type')}-headers`);
+    this.set('actionsComponentName', `pbi-${this.get('type')}-actions`);
+    this.set('previewComponentName', `pbi-${this.get('type')}-preview`);
+  }
+});
+
+const FakeNode = Node.extend({
+  init() {
+    this._super();
+
+    this.set('detailsComponentName', `pbi-default-details`);
+    this.set('headersComponentName', `pbi-default-headers`);
+    this.set('actionsComponentName', `pbi-default-actions`);
+    this.set('previewComponentName', `pbi-default-preview`);
+  }
 });
 
 const ReportNode = Node.extend({
@@ -17,9 +37,12 @@ const ReportNode = Node.extend({
   expandable: false
 });
 
-const ReportsNode = Node.extend({
+const ReportsNode = FakeNode.extend({
   type: 'reports',
   name: 'Reports',
+  value: Ember.Object.create({
+    name: 'Reports'
+  }),
   nodes: computed('value.reports.@each', function () {
     if(Ember.isEmpty(this.get('value.reports'))) {
       return null;
@@ -38,9 +61,12 @@ const DatasetNode = Node.extend({
   type: 'dataset'
 });
 
-const DatasetsNode = Node.extend({
+const DatasetsNode = FakeNode.extend({
   type: 'datasets',
   name: 'Datasets',
+  value: Ember.Object.create({
+    name: 'Datasets'
+  }),
   nodes: computed('value.datasets.@each', function () {
     if(Ember.isEmpty(this.get('value.datasets'))) {
       return null;
@@ -60,9 +86,12 @@ const ImportNode = Node.extend({
   expandable: false
 });
 
-const ImportsNode = Node.extend({
+const ImportsNode = FakeNode.extend({
   type: 'imports',
   name: 'Imports',
+  value: Ember.Object.create({
+    name: 'Imports'
+  }),
   nodes: computed('value.imports.@each', function () {
     if(Ember.isEmpty(this.get('value.imports'))) {
       return null;
@@ -81,7 +110,7 @@ const WorkspaceNode = Node.extend({
   type: 'workspace',
 
   init() {
-    this._super.apply();
+    this._super();
 
     const nodes = [
       ReportsNode.create({
@@ -96,11 +125,13 @@ const WorkspaceNode = Node.extend({
     ];
 
     this.set('nodes', nodes);
+    this.set('headersComponentName', `pbi-default-headers`);
+    this.set('detailsComponentName', `pbi-default-details`);
   }
 });
 
 const WorkspaceCollectionNode = Node.extend({
-  type: 'workspaceCollection',
+  type: 'workspace-collection',
 
   nodes: computed('value.workspaces.@each', function () {
     if(Ember.isEmpty(this.get('value.workspaces'))) {
@@ -118,7 +149,7 @@ const WorkspaceCollectionNode = Node.extend({
 });
 
 const ResourceGroupNode = Node.extend({
-  type: 'resourceGroup',
+  type: 'resource-group',
 
   nodes: computed('value.workspaceCollections.@each', function () {
     if(Ember.isEmpty(this.get('value.workspaceCollections'))) {
@@ -152,6 +183,13 @@ const SubscriptionNode = Node.extend({
   })
 });
 
+const RootNode = Node.extend({
+  type: 'root',
+  value: null,
+  expandable: true,
+  expanded: true
+});
+
 export default Ember.Controller.extend({
   store: Ember.inject.service('store'),
   session: Ember.inject.service('session'),
@@ -172,6 +210,16 @@ export default Ember.Controller.extend({
       });
     });
   }),
+
+  treeRoot: null,
+
+  init() {
+    this._super();
+
+    this.set('treeRoot', RootNode.create({
+      nodes: this.get('subscriptionNodes')
+    }));
+  },
 
   actions: {
     loadSubscriptions() {

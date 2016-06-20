@@ -10,7 +10,13 @@ export default Ember.Component.extend({
   classNameBindings: ['isSelected:pbi-node--selected'],
 
   isSelected: computed('selectedNode', function () {
-    return `${this.get('node.type')}${this.get('node.value.id')}` === `${this.get('node.type')}${this.get('selectedNode.value.id')}`;
+    const nodeId = `${this.get('node.type')}${this.get('node.value.id')}`;
+    const selectedNodeId = `${this.get('node.type')}${this.get('selectedNode.value.id')}`;
+    const isSelected = nodeId === selectedNodeId;
+    if(isSelected) {
+      console.log(`nodeId: `, nodeId, ` selectedNodeId: `, selectedNodeId);
+    }
+    return isSelected;
   }),
 
   node: null,

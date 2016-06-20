@@ -71,16 +71,18 @@
       </div>
       <div class="pbi-explorer__currentlist">
         {{#if selectedNode}}
-        <h5>{{selectedNode.type}}</h5>
-        <ul class="pbi-selected-node-list">
-          {{#each selectedNode.nodes as |node|}}
-            <li {{action (action "selectItem" node)}} {{action (action "doubleClickItem" node) on="doubleClick"}} class="{{if (eq node selectedItem) 'selected'}}" >
-              {{node.name}}
-            </li>
-          {{else}}
-            No results.
-          {{/each}}
-        </ul>
+          {{#if (gt selectedNode.nodes.length 0)}}
+            <b>{{component selectedNode.nodes.firstObject.headersComponentName}}</b>
+          {{/if}}
+          <ul class="pbi-selected-node-list">
+            {{#each selectedNode.nodes as |node|}}
+              <li {{action (action "selectItem" node)}} {{action (action "doubleClickItem" node) on="doubleClick"}} class="{{if (eq node selectedItem) 'selected'}}" >
+                {{component node.detailsComponentName node=node}}
+              </li>
+            {{else}}
+              No results.
+            {{/each}}
+          </ul>
         {{else}}
           Select an item from the tree on the left.
         {{/if}}
