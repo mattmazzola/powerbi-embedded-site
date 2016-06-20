@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import fuzzy from 'fuzzy';
 
 const {
   computed
@@ -195,6 +196,7 @@ export default Ember.Controller.extend({
   session: Ember.inject.service('session'),
   sessionAccount: Ember.inject.service('session-account'),
 
+  searchInput: null,
   selectedNode: null,
   selectedItem: null,
   subscriptions: null,
@@ -221,6 +223,23 @@ export default Ember.Controller.extend({
     }));
   },
 
+  fuzzySearchResults: computed('searchInput', 'selectedNode.nodes.@each', function () {
+    const nodes = this.get('selectedNode.nodes');
+    if(!nodes || nodes.length === 0) {
+      return [];
+    }
+
+    const options = {
+      pre: '<',
+      post: '>',
+      extract: function(el) { return el.name; }
+    };
+    
+    const searchTerm = this.get('searchInput') || '';
+
+    return fuzzy.filter(searchTerm, nodes, options);
+  }),
+
   actions: {
     loadSubscriptions() {
       this.set('subscriptions', this.store.findAll('subscription'));
@@ -237,6 +256,21 @@ export default Ember.Controller.extend({
     doubleClickItem(node) {
       node.set('expanded', true);
       this.set('selectedNode', node);
+    },
+
+    searchEscapePressed() {
+      this.set('searchInput', null);
+    },
+
+    searchEnterPressed() {
+      console.log('enter pressed');
+      const fuzzySearchResults = this.get('fuzzySearchResults');
+      if(fuzzySearchResults.length > 0) {
+        const firstNode = fuzzySearchResults.get('firstObject.original');
+        firstNode.set('expanded', true);
+        this.set('selectedNode', firstNode);
+        this.set('searchInput', null);
+      }
     }
   }
 });
