@@ -157,6 +157,8 @@ export default Ember.Controller.extend({
   session: Ember.inject.service('session'),
   sessionAccount: Ember.inject.service('session-account'),
 
+  selectedNode: null,
+  selectedItem: null,
   subscriptions: null,
   subscriptionNodes: computed('subscriptions.@each', function () {
     if(Ember.isEmpty(this.get('subscriptions'))) {
@@ -176,8 +178,17 @@ export default Ember.Controller.extend({
       this.set('subscriptions', this.store.findAll('subscription'));
     },
 
-    expand(node) {
-      node.set('expanded', !node.get('expanded'));
+    selectNode(node) {
+      this.set('selectedNode', node);
+    },
+
+    selectItem(item) {
+      this.set('selectedItem', item);
+    },
+
+    doubleClickItem(node) {
+      node.set('expanded', true);
+      this.set('selectedNode', node);
     }
   }
 });

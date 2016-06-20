@@ -1,14 +1,16 @@
 <li>
-  {{#if node.expandable}}
-    <button type="button" {{action "expand" node}} class="toggleButton {{if node.expanded "rotate90right"}}">{{pbi-icon name="chevronrightmedium" size="small"}}</button>
-  {{/if}}
-  <span {{action "singleClicked" node}} {{action "doubleClicked" node on="doubleClick"}}>
-    {{node.name}}
-  </span>
+  <div class="pbi-node__name">
+    {{#if node.expandable}}
+      <button type="button" {{action "expand" node}} class="pbi-node__toggle {{if node.expanded "pbi-node__toggle--expanded"}}">{{pbi-icon name="chevronrightmedium" size="small"}}</button>
+    {{/if}}
+    <span class="pbi-node__name" {{action "singleClicked" node}} {{action "doubleClicked" node on="doubleClick"}}>
+      {{node.name}}
+    </span>
+  </div>
   {{#if (and node.expandable node.expanded)}}
-    <ul class="tree">
+    <ul class="pbi-node__tree">
       {{#each node.nodes as |node|}}
-        {{pbi-node node=node}}
+        {{pbi-node node=node onSingleClick=onSingleClick selectedNode=selectedNode }}
       {{/each}}
     </ul>
   {{/if}}

@@ -2,8 +2,13 @@
 @import "./pbi-layout-main";
 @import "./pbi-layout-header";
 @import "./pbi-layout-content";
+@import "./pbi-node";
 @import "./pbi-nav";
 @import "./pbi-nav-button";
+@import "./pbi-explorer";
+@import "./pbi-explorer-actions";
+@import "./pbi-explorer-path";
+@import "./pbi-explorer-path-navigation-button";
 
 html {
   height: 100%;
@@ -96,15 +101,19 @@ body > .ember-view {
   }
 }
 
-.toggleButton {
-  background: none;
-  border: none;
-  transition: all ease-in-out 0.2s;
-}
-.rotate90right {
-  transform: rotateZ(90deg);
+ul.tree {
+  margin: 0;
+  padding: 0;
+  padding-left: 1em;
+  list-style: none;
 }
 
-ul.tree {
+.pbi-selected-node-list {
   list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pbi-selected-node-list .selected {
+  background-color: rgba(0, 200, 255, 0.4);
 }

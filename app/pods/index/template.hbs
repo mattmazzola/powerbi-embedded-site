@@ -1,287 +1,289 @@
-<h1>1. Sign in with Azure account {{#if session.isAuthenticated}} {{pbi-icon name="checkmark" size="large" class="text-success"}} {{/if}}</h1> 
-<p>You need to use an account which has an associated Azure subscription.</p>
-<p>
-  {{#if session.isAuthenticated}}
-    <div class="clearfix">
-      <div class="pull-left">
-        {{secure-image src=sessionAccount.photoUrl accessToken=sessionAccount.microsoftGraph.accessToken class="profile-image"}}
+<div class="pbi-layout-content pbi-layout-content--absolute">
+
+  <h1>1. Sign in with Azure account {{#if session.isAuthenticated}} {{pbi-icon name="checkmark" size="large" class="text-success"}} {{/if}}</h1> 
+  <p>You need to use an account which has an associated Azure subscription.</p>
+  <p>
+    {{#if session.isAuthenticated}}
+      <div class="clearfix">
+        <div class="pull-left">
+          {{secure-image src=sessionAccount.photoUrl accessToken=sessionAccount.microsoftGraph.accessToken class="profile-image"}}
+        </div>
+        <div class="pull-left">
+          {{session.data.authenticated.user.displayName}} <br>
+          {{session.data.authenticated.user.mail}} <br>
+          {{session.data.authenticated.user.jobTitle}} <br>
+          Power BI License: {{#if sessionAccount.hasPowerBiLicense}} {{pbi-icon name="checkmark" size="small" class="text-success"}} {{/if}}
+        </div>
       </div>
-      <div class="pull-left">
-        {{session.data.authenticated.user.displayName}} <br>
-        {{session.data.authenticated.user.mail}} <br>
-        {{session.data.authenticated.user.jobTitle}} <br>
-        Power BI License: {{#if sessionAccount.hasPowerBiLicense}} {{pbi-icon name="checkmark" size="small" class="text-success"}} {{/if}}
-      </div>
+    {{else}}
+      <button type="button" class="btn btn-lg btn-default"  {{action (route-action 'login')}}>Sign In</button>
+    {{/if}}
+  </p>
+
+  <h1>2. Create PowerBI Workspace Collection</h1>
+
+  <button type="button" class="btn btn-primary" {{action (action "loadSubscriptions")}} disabled={{not session.isAuthenticated}}>Load Subscriptions</button>
+
+  <h3>Select Subscription:</h3>
+  {{#power-select
+    selected=selectedSubscription
+    options=subscriptions
+    searchField="displayName"
+    onchange=(action (mut selectedSubscription))
+    as |subscription|}}
+    {{subscription.displayName}} - {{subscription.id}} - {{subscription.state}}
+  {{/power-select}}
+
+  <h3>Select Resource Group:</h3>
+  {{#power-select
+    selected=selectedResourceGroup
+    disabled=(not gt selectedSubscription.resourceGroups.length 0)
+    options=selectedSubscription.resourceGroups
+    searchField="id"
+    onchange=(action (mut selectedResourceGroup))
+    as |resourceGroup|}}
+    {{resourceGroup.id}} - {{resourceGroup.location}} - {{resourceGroup.provisioningState}}
+  {{/power-select}}
+
+  <h3>Select Existing Workspace Collection:</h3>
+  {{#power-select
+    selected=selectedWorkspaceCollection
+    options=selectedResourceGroup.workspaceCollections
+    searchField="id"
+    onchange=(action (mut selectedWorkspaceCollection))
+    as |workspaceCollection|}}
+    {{workspaceCollection.id}} - {{workspaceCollection.location}} - {{moment-format workspaceCollection.createdDate 'LLL'}} - {{workspaceCollection.provisioningState}} - {{workspaceCollection.status}} - {{workspaceCollection.skutier}}
+  {{/power-select}}
+
+  <h3>Create new Workspace Collection:</h3>
+  <form {{action (route-action "createWorkspaceCollection" (hash name=workspaceCollectionName subscription=selectedSubscription resourceGroup=selectedResourceGroup)) on="submit" }}>
+    <div class="form-group">
+      <label for="workspaceCollectionName">Name</label>
+      {{input type="text" class="form-control" id="workspaceCollectionName" placeholder="Workspace Collection Name" value=workspaceCollectionName required="required"}}
+      <small>Name for workspace collection. E.g. Finance: {{workspaceCollectionName}}</small>
     </div>
-  {{else}}
-    <button type="button" class="btn btn-lg btn-default"  {{action (route-action 'login')}}>Sign In</button>
+    <button type="submit" class="btn btn-success" disabled={{not selectedResourceGroup}}>Create new Workspace Collection</button>
+  </form>
+
+  <h1>3. Create a Workspace</h1>
+  {{#if selectedWorkspaceCollection}}
+  <p>
+    Selected WorkspaceCollection: {{selectedWorkspaceCollection.id}}
+  </p>
+  <p>
+    Access Key1: {{selectedWorkspaceCollection.accessKeys.key1}}
+    {{#copy-button
+      clipboardText=selectedWorkspaceCollection.accessKeys.key1
+      class="btn btn-primary"
+    }}
+      Copy Key1
+    {{/copy-button}}
+  </p>
+  <p>
+    Access Key2: {{selectedWorkspaceCollection.accessKeys.key2}}
+    {{#copy-button
+      clipboardText=selectedWorkspaceCollection.accessKeys.key2
+      class="btn btn-primary"
+    }}
+      Copy Key2
+    {{/copy-button}}
+  </p>
   {{/if}}
-</p>
 
-<h1>2. Create PowerBI Workspace Collection</h1>
+  <h3>Select Existing Workspace:</h3>
+  {{#power-select
+    selected=selectedWorkspace
+    options=selectedWorkspaceCollection.workspaces
+    searchField="id"
+    onchange=(action (mut selectedWorkspace))
+    as |workspace|}}
+    {{workspace.id}}
+  {{/power-select}}
 
-<button type="button" class="btn btn-primary" {{action (action "loadSubscriptions")}} disabled={{not session.isAuthenticated}}>Load Subscriptions</button>
+  <h3>Create new Workspace:</h3>
+  <button type="button" class="btn btn-success" disabled={{not selectedWorkspaceCollection}} {{action (route-action "createWorkspace" (hash workspaceCollection=selectedWorkspaceCollection)) }}>Create new Workspace</button>
 
-<h3>Select Subscription:</h3>
-{{#power-select
-  selected=selectedSubscription
-  options=subscriptions
-  searchField="displayName"
-  onchange=(action (mut selectedSubscription))
-  as |subscription|}}
-  {{subscription.displayName}} - {{subscription.id}} - {{subscription.state}}
-{{/power-select}}
-
-<h3>Select Resource Group:</h3>
-{{#power-select
-  selected=selectedResourceGroup
-  disabled=(not gt selectedSubscription.resourceGroups.length 0)
-  options=selectedSubscription.resourceGroups
-  searchField="id"
-  onchange=(action (mut selectedResourceGroup))
-  as |resourceGroup|}}
-  {{resourceGroup.id}} - {{resourceGroup.location}} - {{resourceGroup.provisioningState}}
-{{/power-select}}
-
-<h3>Select Existing Workspace Collection:</h3>
-{{#power-select
-  selected=selectedWorkspaceCollection
-  options=selectedResourceGroup.workspaceCollections
-  searchField="id"
-  onchange=(action (mut selectedWorkspaceCollection))
-  as |workspaceCollection|}}
-  {{workspaceCollection.id}} - {{workspaceCollection.location}} - {{moment-format workspaceCollection.createdDate 'LLL'}} - {{workspaceCollection.provisioningState}} - {{workspaceCollection.status}} - {{workspaceCollection.skutier}}
-{{/power-select}}
-
-<h3>Create new Workspace Collection:</h3>
-<form {{action (route-action "createWorkspaceCollection" (hash name=workspaceCollectionName subscription=selectedSubscription resourceGroup=selectedResourceGroup)) on="submit" }}>
-  <div class="form-group">
-    <label for="workspaceCollectionName">Name</label>
-    {{input type="text" class="form-control" id="workspaceCollectionName" placeholder="Workspace Collection Name" value=workspaceCollectionName required="required"}}
-    <small>Name for workspace collection. E.g. Finance: {{workspaceCollectionName}}</small>
+  <div class="panel panel-default">
+    <div class="panel-heading">Provision Tokens:</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each selectedWorkspaceCollection.tokens as |token|}}
+          <tr>
+            <td class="text-wrap">{{token}}</td>
+            <td>{{#copy-button clipboardText=token class="btn btn-primary" }}Copy{{/copy-button}}</td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="2" class="text-center text-danger">No Tokens Created</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
-  <button type="submit" class="btn btn-success" disabled={{not selectedResourceGroup}}>Create new Workspace Collection</button>
-</form>
+  <button type="button" class="btn btn-primary" {{action "generateProvisionToken" selectedWorkspaceCollection (route-action "generateProvisionToken" (hash workspaceCollection=selectedWorkspaceCollection))  }}>Get Provision Token</button>
 
-<h1>3. Create a Workspace</h1>
-{{#if selectedWorkspaceCollection}}
-<p>
-  Selected WorkspaceCollection: {{selectedWorkspaceCollection.id}}
-</p>
-<p>
-  Access Key1: {{selectedWorkspaceCollection.accessKeys.key1}}
-  {{#copy-button
-    clipboardText=selectedWorkspaceCollection.accessKeys.key1
-    class="btn btn-primary"
-  }}
-    Copy Key1
-  {{/copy-button}}
-</p>
-<p>
-  Access Key2: {{selectedWorkspaceCollection.accessKeys.key2}}
-  {{#copy-button
-    clipboardText=selectedWorkspaceCollection.accessKeys.key2
-    class="btn btn-primary"
-  }}
-    Copy Key2
-  {{/copy-button}}
-</p>
-{{/if}}
-
-<h3>Select Existing Workspace:</h3>
-{{#power-select
-  selected=selectedWorkspace
-  options=selectedWorkspaceCollection.workspaces
-  searchField="id"
-  onchange=(action (mut selectedWorkspace))
-  as |workspace|}}
-  {{workspace.id}}
-{{/power-select}}
-
-<h3>Create new Workspace:</h3>
-<button type="button" class="btn btn-success" disabled={{not selectedWorkspaceCollection}} {{action (route-action "createWorkspace" (hash workspaceCollection=selectedWorkspaceCollection)) }}>Create new Workspace</button>
-
-<div class="panel panel-default">
-  <div class="panel-heading">Provision Tokens:</div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Token</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each selectedWorkspaceCollection.tokens as |token|}}
+  <div class="panel panel-default">
+    <div class="panel-heading">Imports:</div>
+    <table class="table">
+      <thead>
         <tr>
-          <td class="text-wrap">{{token}}</td>
-          <td>{{#copy-button clipboardText=token class="btn btn-primary" }}Copy{{/copy-button}}</td>
+          <th>Name</th>
+          <th>Id</th>
+          <th>State</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th>&nbsp;</th>
         </tr>
-      {{else}}
+      </thead>
+      <tbody>
+        {{#each selectedWorkspace.imports as |import|}}
+          <tr>
+            <td>{{import.name}}</td>
+            <td>{{import.id}}</td>
+            <td>{{import.importState}}</td>
+            <td>{{moment-format import.createdDateTime 'LLL'}}</td>
+            <td>{{moment-format import.updatedDateTime 'LLL'}}</td>
+            <td><button type="button" class="btn btn-primary" {{action (action "selectImport" import)}}>Select</button></td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="6" class="text-center text-danger">No Import Loaded</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Reports:</div>
+    <table class="table">
+      <thead>
         <tr>
-          <td colspan="2" class="text-center text-danger">No Tokens Created</td>
+          <th>Name</th>
+          <th>Id</th>
+          <th>&nbsp;</th>
         </tr>
-      {{/each}}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {{#each selectedWorkspace.reports as |report|}}
+          <tr>
+            <td>{{report.name}}</td>
+            <td>{{report.id}}</td>
+            <td><button type="button" class="btn btn-primary" {{action (action "selectReport" report)}}>Select</button></td>
+          </tr>
+          <tr>
+            <td colspan="3">{{report.webUrl}}</td>
+          </tr>
+          <tr>
+            <td colspan="3">{{report.embedUrl}}</td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="3" class="text-center text-danger">No Reports Loaded</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Datasets:</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Id</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each selectedWorkspace.datasets as |dataset|}}
+          <tr>
+            <td>{{dataset.name}}</td>
+            <td>{{dataset.id}}</td>
+            <td><button type="button" class="btn btn-primary" {{action (action "selectDataset" dataset)}}>Select</button></td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="3" class="text-center text-danger">No Datasets Loaded</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Gateways:</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each selectedWorkspace.gateways as |gateway|}}
+          <tr>
+            <td>{{gateway.id}}</td>
+            <td><button type="button" class="btn btn-primary" {{action (action "selectGateway" gateway)}}>Select</button></td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="2" class="text-center text-danger">No Gateways Loaded</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Dev Tokens:</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each selectedWorkspace.tokens as |token|}}
+          <tr>
+            <td class="text-wrap">{{token}}</td>
+            <td>{{#copy-button clipboardText=token class="btn btn-primary" }}Copy{{/copy-button}}</td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="2" class="text-center text-danger">No Tokens Created</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <button type="button" class="btn btn-primary" {{action "generateDevToken" selectedWorkspace (route-action "generateDevToken" (hash workspaceCollection=selectedWorkspaceCollection workspace=selectedWorkspace))  }}>Get Dev Token</button>
+
+
+  <h1>4. Upload a Report</h1>
+  <p>
+    Selected Workspace: {{selectedWorkspace.name}}
+  </p>
+  {{#pbix-file-upload workspaceCollection=selectedWorkspaceCollection workspace=selectedWorkspace}}{{/pbix-file-upload}}
+
+  <h1>5. Optional: Update Report Credentials</h1>
+  <p>If a report is using DirectQuery you need to supply credentials to access the data securely.</p>
+  <p>
+    Selected Report: {{selectedReport.name}}
+  </p>
+
+  <h1>6. Embed Report</h1>
+  {{#if embedConfig.accessToken.isSettled}}
+    {{powerbi-report embedUrl=embedConfig.embedUrl accessToken=embedConfig.accessToken.content}}
+  {{/if}}
 </div>
-<button type="button" class="btn btn-primary" {{action "generateProvisionToken" selectedWorkspaceCollection (route-action "generateProvisionToken" (hash workspaceCollection=selectedWorkspaceCollection))  }}>Get Provision Token</button>
-
-<div class="panel panel-default">
-  <div class="panel-heading">Imports:</div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Id</th>
-        <th>State</th>
-        <th>Created</th>
-        <th>Updated</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each selectedWorkspace.imports as |import|}}
-        <tr>
-          <td>{{import.name}}</td>
-          <td>{{import.id}}</td>
-          <td>{{import.importState}}</td>
-          <td>{{moment-format import.createdDateTime 'LLL'}}</td>
-          <td>{{moment-format import.updatedDateTime 'LLL'}}</td>
-          <td><button type="button" class="btn btn-primary" {{action (action "selectImport" import)}}>Select</button></td>
-        </tr>
-      {{else}}
-        <tr>
-          <td colspan="6" class="text-center text-danger">No Import Loaded</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
-
-<div class="panel panel-default">
-  <div class="panel-heading">Reports:</div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Id</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each selectedWorkspace.reports as |report|}}
-        <tr>
-          <td>{{report.name}}</td>
-          <td>{{report.id}}</td>
-          <td><button type="button" class="btn btn-primary" {{action (action "selectReport" report)}}>Select</button></td>
-        </tr>
-        <tr>
-          <td colspan="3">{{report.webUrl}}</td>
-        </tr>
-        <tr>
-          <td colspan="3">{{report.embedUrl}}</td>
-        </tr>
-      {{else}}
-        <tr>
-          <td colspan="3" class="text-center text-danger">No Reports Loaded</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
-
-<div class="panel panel-default">
-  <div class="panel-heading">Datasets:</div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Id</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each selectedWorkspace.datasets as |dataset|}}
-        <tr>
-          <td>{{dataset.name}}</td>
-          <td>{{dataset.id}}</td>
-          <td><button type="button" class="btn btn-primary" {{action (action "selectDataset" dataset)}}>Select</button></td>
-        </tr>
-      {{else}}
-        <tr>
-          <td colspan="3" class="text-center text-danger">No Datasets Loaded</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
-
-<div class="panel panel-default">
-  <div class="panel-heading">Gateways:</div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each selectedWorkspace.gateways as |gateway|}}
-        <tr>
-          <td>{{gateway.id}}</td>
-          <td><button type="button" class="btn btn-primary" {{action (action "selectGateway" gateway)}}>Select</button></td>
-        </tr>
-      {{else}}
-        <tr>
-          <td colspan="2" class="text-center text-danger">No Gateways Loaded</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
-
-<div class="panel panel-default">
-  <div class="panel-heading">Dev Tokens:</div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Token</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each selectedWorkspace.tokens as |token|}}
-        <tr>
-          <td class="text-wrap">{{token}}</td>
-          <td>{{#copy-button clipboardText=token class="btn btn-primary" }}Copy{{/copy-button}}</td>
-        </tr>
-      {{else}}
-        <tr>
-          <td colspan="2" class="text-center text-danger">No Tokens Created</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
-
-<button type="button" class="btn btn-primary" {{action "generateDevToken" selectedWorkspace (route-action "generateDevToken" (hash workspaceCollection=selectedWorkspaceCollection workspace=selectedWorkspace))  }}>Get Dev Token</button>
-
-
-<h1>4. Upload a Report</h1>
-<p>
-  Selected Workspace: {{selectedWorkspace.name}}
-</p>
-{{#pbix-file-upload workspaceCollection=selectedWorkspaceCollection workspace=selectedWorkspace}}{{/pbix-file-upload}}
-
-<h1>5. Optional: Update Report Credentials</h1>
-<p>If a report is using DirectQuery you need to supply credentials to access the data securely.</p>
-<p>
-  Selected Report: {{selectedReport.name}}
-</p>
-
-<h1>6. Embed Report</h1>
-{{#if embedConfig.accessToken.isSettled}}
-  {{powerbi-report embedUrl=embedConfig.embedUrl accessToken=embedConfig.accessToken.content}}
-{{/if}}
-
 

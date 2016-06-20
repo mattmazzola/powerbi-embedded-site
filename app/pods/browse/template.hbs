@@ -1,27 +1,95 @@
-<h1>Browse</h1>
+<div class="pbi-layout-content pbi-layout-content--flex">
 
-<p>
-  {{#if session.isAuthenticated}}
-    <div class="clearfix">
-      <div class="pull-left">
-        {{secure-image src=sessionAccount.photoUrl accessToken=sessionAccount.microsoftGraph.accessToken class="profile-image"}}
-      </div>
-      <div class="pull-left">
-        {{session.data.authenticated.user.displayName}} <br>
-        {{session.data.authenticated.user.mail}} <br>
-        {{session.data.authenticated.user.jobTitle}} <br>
-        Power BI License: {{#if sessionAccount.hasPowerBiLicense}} {{pbi-icon name="checkmark" size="small" class="text-success"}} {{/if}}
+  <div>
+    <h1>Browse</h1>
+    <p>
+      {{#if session.isAuthenticated}}
+        <div class="clearfix">
+          <div class="pull-left">
+            {{secure-image src=sessionAccount.photoUrl accessToken=sessionAccount.microsoftGraph.accessToken class="profile-image"}}
+          </div>
+          <div class="pull-left">
+            {{session.data.authenticated.user.displayName}} <br>
+            {{session.data.authenticated.user.mail}} <br>
+            {{session.data.authenticated.user.jobTitle}} <br>
+            Power BI License: {{#if sessionAccount.hasPowerBiLicense}} {{pbi-icon name="checkmark" size="small" class="text-success"}} {{/if}}
+          </div>
+        </div>
+      {{else}}
+        <button type="button" class="btn btn-lg btn-default"  {{action (route-action 'login')}}>Sign In</button>
+      {{/if}}
+    </p>
+    <button type="button" class="btn btn-primary" {{action (action "loadSubscriptions")}} disabled={{not session.isAuthenticated}}>Load Subscriptions</button>
+  </div>
+
+  <div class="pbi-explorer">
+    <div class="pbi-explorer__actions">
+      <div class="pbi-explorer-actions">
+        <div class="pbi-explorer-actions__tabs">
+          <button class="pbi-explorer-actions__tab pbi-explorer-actions__tab--active">
+            Active Tab
+          </button>
+          <button class="pbi-explorer-actions__tab">
+            Tab
+          </button>
+        </div>
+        <div class="pbi-explorer-actions__content">
+          <div class="pbi-explorer-action">
+            Action 1
+          </div>
+        </div>
       </div>
     </div>
-  {{else}}
-    <button type="button" class="btn btn-lg btn-default"  {{action (route-action 'login')}}>Sign In</button>
-  {{/if}}
-</p>
+    <div class="pbi-explorer__path">
+      <div class="pbi-explorer-path">
+        <div class="pbi-explorer-path__navigation-buttons">
+          <button class="pbi-explorer-path-navigation-button">
+            {{pbi-icon name="back" size="small"}}
+          </button>
+          <button class="pbi-explorer-path-navigation-button">
+            {{pbi-icon name="rightarrow" size="small"}}
+          </button>
+          <button class="pbi-explorer-path-navigation-button">
+            {{pbi-icon name="uparrow" size="small"}}
+          </button>
+        </div>
+        <div class="pbi-explorer-path__address">
+          Subscription > ResourceGroup > {{input type="text" class="pbi-explorer-path__address-input" placeholder="Address Bar"}}
+        </div>
+        {{input type="text" class="pbi-explorer-path__search" placeholder="Filter"}}
+      </div>
+    </div>
+    <div class="pbi-explorer__content">
+      <div class="pbi-explorer__tree">
+        <ul class="tree">
+          {{#each subscriptionNodes as |node|}}
+            {{pbi-node node=node onSingleClick=(action 'selectNode') selectedNode=selectedNode }}
+          {{else}}
+            <li>No Subscriptions</li>
+          {{/each}}
+        </ul>
+      </div>
+      <div class="pbi-explorer__currentlist">
+        {{#if selectedNode}}
+        <h5>{{selectedNode.type}}</h5>
+        <ul class="pbi-selected-node-list">
+          {{#each selectedNode.nodes as |node|}}
+            <li {{action (action "selectItem" node)}} {{action (action "doubleClickItem" node) on="doubleClick"}} class="{{if (eq node selectedItem) 'selected'}}" >
+              {{node.name}}
+            </li>
+          {{else}}
+            No results.
+          {{/each}}
+        </ul>
+        {{else}}
+          Select an item from the tree on the left.
+        {{/if}}
+      </div>
+      <div class="pbi-explorer__preview">
+        Preview
+        {{selectedItem.name}}
+      </div>
+    </div>
+  </div>
 
-<button type="button" class="btn btn-primary" {{action (action "loadSubscriptions")}} disabled={{not session.isAuthenticated}}>Load Subscriptions</button>
-
-<ul class="tree">
-  {{#each subscriptionNodes as |node|}}
-    {{pbi-node node=node}}
-  {{/each}}
-</ul>
+</div>
