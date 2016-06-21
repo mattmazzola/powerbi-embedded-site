@@ -12,6 +12,7 @@ const BaseNode = Ember.Object.extend({
   expandable: true,
   expanded: false,
   nodes: null,
+  parent: null,
 
   init() {
     this._super();
@@ -52,6 +53,7 @@ const ReportsNode = FakeNode.extend({
 
     return this.get('value.reports').map(report => {
       return ReportNode.create({
+        parent: this,
         value: report,
         name: report.get('name')
       });
@@ -84,6 +86,7 @@ const DatasetsNode = FakeNode.extend({
 
     return this.get('value.datasets').map(dataset => {
       return DatasetNode.create({
+        parent: this,
         value: dataset,
         name: dataset.get('name')
       });
@@ -116,6 +119,7 @@ const ImportsNode = FakeNode.extend({
 
     return this.get('value.imports').map(xImport => {
       return ImportNode.create({
+        parent: this,
         value: xImport,
         name: xImport.get('name')
       });
@@ -131,12 +135,15 @@ const WorkspaceNode = BaseNode.extend({
 
     const nodes = [
       ReportsNode.create({
+        parent: this,
         value: this.get('value')
       }),
       ImportsNode.create({
+        parent: this,
         value: this.get('value')
       }),
       DatasetsNode.create({
+        parent: this,
         value: this.get('value')
       })
     ];
@@ -157,6 +164,7 @@ const WorkspaceCollectionNode = BaseNode.extend({
 
     return this.get('value.workspaces').map(workspace => {
       return WorkspaceNode.create({
+        parent: this,
         type: 'workspace',
         value: workspace,
         name: workspace.get('id')
@@ -175,6 +183,7 @@ const ResourceGroupNode = BaseNode.extend({
 
     return this.get('value.workspaceCollections').map(workspaceCollection => {
       return WorkspaceCollectionNode.create({
+        parent: this,
         type: 'workspaceCollection',
         value: workspaceCollection,
         name: workspaceCollection.get('id')
@@ -200,6 +209,7 @@ const SubscriptionNode = BaseNode.extend({
 
     return this.get('value.resourceGroups').map(resourceGroup => {
       return ResourceGroupNode.create({
+        parent: this,
         value: resourceGroup,
         name: resourceGroup.get('id')
       });

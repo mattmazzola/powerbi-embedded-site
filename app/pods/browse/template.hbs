@@ -34,7 +34,7 @@
           </button>
         </div>
         <div class="pbi-explorer-path__address">
-          Subscription > ResourceGroup > {{input type="text" class="pbi-explorer-path__address-input" placeholder="Address Bar"}}
+          {{pbi-breadcrumbs tagName="span" node=selectedTreeNode }} {{! input type="text" class="pbi-explorer-path__address-input" placeholder="Address Bar"}}
         </div>
         {{input type="text" class="pbi-explorer-path__search" placeholder="Filter" value=searchInput escape-press="searchEscapePressed" insert-newline="searchEnterPressed"}}
       </div>
