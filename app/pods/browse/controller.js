@@ -153,6 +153,12 @@ const WorkspaceCollectionNode = Node.extend({
 const ResourceGroupNode = Node.extend({
   type: 'resource-group',
 
+  init() {
+    this._super();
+
+    this.set('previewComponentName', `pbi-default-preview`);
+  },
+
   nodes: computed('value.workspaceCollections.@each', function () {
     if(Ember.isEmpty(this.get('value.workspaceCollections'))) {
       return null;
@@ -170,6 +176,13 @@ const ResourceGroupNode = Node.extend({
 
 const SubscriptionNode = Node.extend({
   type: 'subscription',
+
+  init() {
+    this._super();
+
+    this.set('actionsComponentName', `pbi-default-actions`);
+    this.set('previewComponentName', `pbi-default-preview`);
+  },
 
   nodes: computed('value.resourceGroups.@each', function () {
     if(Ember.isEmpty(this.get('value.resourceGroups'))) {
@@ -197,9 +210,10 @@ export default Ember.Controller.extend({
   session: inject.service('session'),
   sessionAccount: inject.service('session-account'),
 
+  mostRecentSelectedNode: null,
   searchInput: null,
+  selectedListNode: null,
   selectedTreeNode: null,
-  selectedItem: null,
   subscriptions: null,
   subscriptionNodes: computed('subscriptions.@each', function () {
     if(Ember.isEmpty(this.get('subscriptions'))) {
@@ -246,17 +260,20 @@ export default Ember.Controller.extend({
       this.set('subscriptions', this.store.findAll('subscription'));
     },
 
-    selectNode(node) {
+    treeNodeClicked(node) {
       this.set('selectedTreeNode', node);
+      this.set('mostRecentSelectedNode', node);
     },
 
-    selectItem(item) {
-      this.set('selectedItem', item);
+    listNodeClicked(node) {
+      this.set('selectedListNode', node);
+      this.set('mostRecentSelectedNode', node);
     },
 
-    doubleClickItem(node) {
+    listNodeDoubleClicked(node) {
       node.set('expanded', true);
       this.set('selectedTreeNode', node);
+      this.set('mostRecentSelectedNode', node);
     },
 
     searchEscapePressed() {
@@ -264,12 +281,12 @@ export default Ember.Controller.extend({
     },
 
     searchEnterPressed() {
-      console.log('enter pressed');
       const fuzzySearchResults = this.get('fuzzySearchResults');
       if(fuzzySearchResults.length > 0) {
         const firstNode = fuzzySearchResults.get('firstObject.original');
         firstNode.set('expanded', true);
         this.set('selectedTreeNode', firstNode);
+        this.set('mostRecentSelectedNode', firstNode);
         this.set('searchInput', null);
       }
     }

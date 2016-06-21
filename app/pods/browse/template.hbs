@@ -17,7 +17,11 @@
         </div>
         <div class="pbi-explorer-actions__content">
           <div class="pbi-explorer-action">
-            Action 1
+            {{#if mostRecentSelectedNode}}
+              {{component mostRecentSelectedNode.actionsComponentName node=mostRecentSelectedNode}}
+            {{else}}
+              Select a node to see actions for that node.
+            {{/if}}
           </div>
         </div>
       </div>
@@ -45,7 +49,7 @@
       <div class="pbi-explorer__tree">
         <ul class="tree">
           {{#each subscriptionNodes as |node|}}
-            {{pbi-node node=node onSingleClick=(action 'selectNode') selectedNode=selectedTreeNode }}
+            {{pbi-node node=node onSingleClick=(action 'treeNodeClicked') selectedNode=selectedTreeNode }}
           {{else}}
             <li>No Subscriptions</li>
           {{/each}}
@@ -58,7 +62,7 @@
           {{/if}}
           <ul class="pbi-selected-node-list">
             {{#each fuzzySearchResults as |fuzzySearchResult|}}
-              <li {{action (action "selectItem" fuzzySearchResult.original)}} {{action (action "doubleClickItem" fuzzySearchResult.original) on="doubleClick"}} class="{{if (eq fuzzySearchResult.original selectedItem) 'selected'}}" >
+              <li {{action (action "listNodeClicked" fuzzySearchResult.original)}} {{action (action "listNodeDoubleClicked" fuzzySearchResult.original) on="doubleClick"}} class="{{if (eq fuzzySearchResult.original selectedListNode) 'selected'}}" >
                 {{component fuzzySearchResult.original.detailsComponentName node=fuzzySearchResult.original fuzzyString=fuzzySearchResult.string}}
               </li>
             {{else}}
@@ -70,8 +74,8 @@
         {{/if}}
       </div>
       <div class="pbi-explorer__preview">
-        Preview
-        {{selectedItem.name}}
+        <h4>Preview</h4>
+        <p>{{mostRecentSelectedNode.name}}</p>
       </div>
     </div>
   </div>
