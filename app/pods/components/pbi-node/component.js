@@ -27,12 +27,10 @@ export default Ember.Component.extend({
     },
 
     singleClicked(node) {
-      console.log('singleClicked');
       this.get('onSingleClick')(node);
     },
 
     doubleClicked(node) {
-      console.log('doubleclicked');
       node.set('expanded', !node.get('expanded'));
     }
   }
