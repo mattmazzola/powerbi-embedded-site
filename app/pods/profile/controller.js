@@ -5,5 +5,6 @@ const {
 } = Ember;
 
 export default Ember.Controller.extend({
-  session: inject.service('session')
+  session: inject.service('session'),
+  sessionAccount: inject.service('session-account')
 });
