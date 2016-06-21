@@ -2,7 +2,8 @@ import Ember from 'ember';
 import fuzzy from 'fuzzy';
 
 const {
-  computed
+  computed,
+  inject
 } = Ember;
 
 const Node = Ember.Object.extend({
@@ -192,9 +193,9 @@ const RootNode = Node.extend({
 });
 
 export default Ember.Controller.extend({
-  store: Ember.inject.service('store'),
-  session: Ember.inject.service('session'),
-  sessionAccount: Ember.inject.service('session-account'),
+  store: inject.service('store'),
+  session: inject.service('session'),
+  sessionAccount: inject.service('session-account'),
 
   searchInput: null,
   selectedTreeNode: null,

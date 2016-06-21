@@ -1,11 +1,7 @@
 <div class="pbi-layout-content pbi-layout-content--flex">
 
   <div>
-    {{#if session.isAuthenticated}}
-      <button type="button" class="btn btn-primary" {{action (action "loadSubscriptions")}} disabled={{not session.isAuthenticated}}>Load Subscriptions</button>
-    {{else}}
-      <button type="button" class="btn btn-lg btn-default"  {{action (route-action 'login')}}>Sign In</button>
-    {{/if}}
+    <button type="button" class="btn btn-primary" {{action (action "loadSubscriptions")}} disabled={{not session.isAuthenticated}}>Load Subscriptions</button>
   </div>
 
   <div class="pbi-explorer">
