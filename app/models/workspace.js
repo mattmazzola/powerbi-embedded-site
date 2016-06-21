@@ -53,9 +53,9 @@ export default Model.extend({
   },
   
   token: computed('tokens', function () {
-    if(this.get('tokens').length > 0) {
-      return Ember.Promise.resolve(this.get('tokens').get('lastObject'));
-    }
+    // if(this.get('tokens').length > 0) {
+    //   return Ember.RSVP.Promise.resolve(this.get('tokens').get('lastObject'));
+    // }
     
     return this.generateDevToken()
       .then(token => {
