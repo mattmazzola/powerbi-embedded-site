@@ -1,11 +1,13 @@
-<button type="button" class="btn btn-default" {{action (route-action 'invalidateSession')}}>Sign Out</button>
-
-<h3>Id Token:</h3>
-{{jwt-viewer accessToken=session.data.authenticated.idToken}}
+<div class="pbi-layout-content pbi-layout-content--absolute">
   
-{{#each session.data.authenticated.resources as |resource|}}
-  <h3>{{resource.endpointUri}}</h3>
-  {{jwt-viewer accessToken=resource.accessToken}}
-{{/each}}
+  <button type="button" class="btn btn-default" {{action (route-action 'invalidateSession')}}>Sign Out</button>
 
+  <h3>Id Token:</h3>
+  {{jwt-viewer accessToken=session.data.authenticated.idToken}}
+    
+  {{#each session.data.authenticated.resources as |resource|}}
+    <h3>{{resource.endpointUri}}</h3>
+    {{jwt-viewer accessToken=resource.accessToken}}
+  {{/each}}
 
+</div>
