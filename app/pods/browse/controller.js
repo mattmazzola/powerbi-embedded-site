@@ -6,7 +6,7 @@ const {
   inject
 } = Ember;
 
-const Node = Ember.Object.extend({
+const BaseNode = Ember.Object.extend({
   type: 'unknown',
   value: null,
   expandable: true,
@@ -23,7 +23,7 @@ const Node = Ember.Object.extend({
   }
 });
 
-const FakeNode = Node.extend({
+const FakeNode = BaseNode.extend({
   init() {
     this._super();
 
@@ -34,7 +34,7 @@ const FakeNode = Node.extend({
   }
 });
 
-const ReportNode = Node.extend({
+const ReportNode = BaseNode.extend({
   type: 'report',
   expandable: false
 });
@@ -59,7 +59,7 @@ const ReportsNode = FakeNode.extend({
   })
 });
 
-const DatasetNode = Node.extend({
+const DatasetNode = BaseNode.extend({
   type: 'dataset',
   expandable: false,
 
@@ -91,7 +91,7 @@ const DatasetsNode = FakeNode.extend({
   })
 });
 
-const ImportNode = Node.extend({
+const ImportNode = BaseNode.extend({
   type: 'import',
   expandable: false,
 
@@ -123,7 +123,7 @@ const ImportsNode = FakeNode.extend({
   })
 });
 
-const WorkspaceNode = Node.extend({
+const WorkspaceNode = BaseNode.extend({
   type: 'workspace',
 
   init() {
@@ -147,7 +147,7 @@ const WorkspaceNode = Node.extend({
   }
 });
 
-const WorkspaceCollectionNode = Node.extend({
+const WorkspaceCollectionNode = BaseNode.extend({
   type: 'workspace-collection',
 
   nodes: computed('value.workspaces.@each', function () {
@@ -165,7 +165,7 @@ const WorkspaceCollectionNode = Node.extend({
   })
 });
 
-const ResourceGroupNode = Node.extend({
+const ResourceGroupNode = BaseNode.extend({
   type: 'resource-group',
 
   nodes: computed('value.workspaceCollections.@each', function () {
@@ -183,7 +183,7 @@ const ResourceGroupNode = Node.extend({
   })
 });
 
-const SubscriptionNode = Node.extend({
+const SubscriptionNode = BaseNode.extend({
   type: 'subscription',
 
   init() {
@@ -207,7 +207,7 @@ const SubscriptionNode = Node.extend({
   })
 });
 
-const RootNode = Node.extend({
+const RootNode = BaseNode.extend({
   type: 'root',
   value: null,
   expandable: true,
