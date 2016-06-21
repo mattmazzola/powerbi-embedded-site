@@ -60,7 +60,15 @@ const ReportsNode = FakeNode.extend({
 });
 
 const DatasetNode = Node.extend({
-  type: 'dataset'
+  type: 'dataset',
+  expandable: false,
+
+  init() {
+    this._super();
+
+    this.set('actionsComponentName', `pbi-default-actions`);
+    this.set('previewComponentName', `pbi-default-preview`);
+  }
 });
 
 const DatasetsNode = FakeNode.extend({
@@ -85,7 +93,14 @@ const DatasetsNode = FakeNode.extend({
 
 const ImportNode = Node.extend({
   type: 'import',
-  expandable: false
+  expandable: false,
+
+  init() {
+    this._super();
+
+    this.set('actionsComponentName', `pbi-default-actions`);
+    this.set('previewComponentName', `pbi-default-preview`);
+  }
 });
 
 const ImportsNode = FakeNode.extend({

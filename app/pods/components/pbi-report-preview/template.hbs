@@ -1,1 +1,8 @@
-{{yield}}
+<h3>Update Report Credentials</h3>
+<p>If a report is using DirectQuery you need to supply credentials to access the data securely.</p>
+<p>Not Implemented</p>
+
+<h3>Embed:</h3>
+{{#if embedConfig.accessToken.isSettled}}
+  {{powerbi-report embedUrl=embedConfig.embedUrl accessToken=embedConfig.accessToken.content}}
+{{/if}}
