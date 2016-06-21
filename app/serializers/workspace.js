@@ -10,7 +10,18 @@ export default RESTSerializer.extend({
   },
   
   normalize(modelClass, resourceHash) {
-    let workspaceCollectionId = resourceHash.workspaceCollectionName;
+    /**
+     * TODO: Use proper serialize functions for noramlizeFindAll vs normalizeCreateRecord
+     */
+    let workspaceCollectionId;
+
+    if(resourceHash.id) {
+      const workspaceCollectionIdRegEx = /workspaceCollections\/([^\/]+)/;
+      [,workspaceCollectionId] = resourceHash.id.match(workspaceCollectionIdRegEx);
+    }
+    else {
+      workspaceCollectionId = resourceHash.workspaceCollectionName;
+    }
     
     if(workspaceCollectionId) {
       const baseUrl = `https://api.powerbi.com/beta/collections/${workspaceCollectionId}/workspaces/${resourceHash.workspaceId}`;
