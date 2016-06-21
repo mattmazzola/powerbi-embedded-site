@@ -16,13 +16,11 @@
           </button>
         </div>
         <div class="pbi-explorer-actions__content">
-          <div class="pbi-explorer-action">
-            {{#if mostRecentSelectedNode}}
-              {{component mostRecentSelectedNode.actionsComponentName node=mostRecentSelectedNode}}
-            {{else}}
-              Select a node to see actions for that node.
-            {{/if}}
-          </div>
+          {{#if mostRecentSelectedNode}}
+            {{component mostRecentSelectedNode.actionsComponentName node=mostRecentSelectedNode}}
+          {{else}}
+            Select a node to see actions for this node type.
+          {{/if}}
         </div>
       </div>
     </div>
@@ -74,8 +72,12 @@
         {{/if}}
       </div>
       <div class="pbi-explorer__preview">
-        <h4>Preview</h4>
-        <p>{{mostRecentSelectedNode.name}}</p>
+        {{#if mostRecentSelectedNode}}
+          <h3>{{mostRecentSelectedNode.name}}</h3>
+          {{component mostRecentSelectedNode.previewComponentName node=mostRecentSelectedNode}}
+        {{else}}
+          Select a node to see preview for that node.
+        {{/if}}
       </div>
     </div>
   </div>

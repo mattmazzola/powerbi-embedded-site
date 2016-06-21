@@ -10,8 +10,7 @@ export default RESTSerializer.extend({
   },
   
   normalize(modelClass, resourceHash) {
-    const workspaceCollectionIdRegEx = /workspaceCollections\/([^\/]+)/;
-    let [,workspaceCollectionId] = resourceHash.id.match(workspaceCollectionIdRegEx);
+    let workspaceCollectionId = resourceHash.workspaceCollectionName;
     
     if(workspaceCollectionId) {
       const baseUrl = `https://api.powerbi.com/beta/collections/${workspaceCollectionId}/workspaces/${resourceHash.workspaceId}`;

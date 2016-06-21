@@ -153,12 +153,6 @@ const WorkspaceCollectionNode = Node.extend({
 const ResourceGroupNode = Node.extend({
   type: 'resource-group',
 
-  init() {
-    this._super();
-
-    this.set('previewComponentName', `pbi-default-preview`);
-  },
-
   nodes: computed('value.workspaceCollections.@each', function () {
     if(Ember.isEmpty(this.get('value.workspaceCollections'))) {
       return null;

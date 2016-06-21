@@ -1,0 +1,56 @@
+<h3>Access Keys:</h3>
+<p>
+  Access Key1: 
+  <div class="well well-sm text-wrap">
+    {{workspaceCollection.accessKeys.key1}}
+  </div>
+  {{#copy-button
+    clipboardText=workspaceCollection.accessKeys.key1
+    class="btn btn-primary"
+  }}
+    Copy Key1
+  {{/copy-button}}
+</p>
+<p>
+  Access Key2:
+  <div class="well well-sm text-wrap">
+    {{workspaceCollection.accessKeys.key2}}
+  </div>
+  {{#copy-button
+    clipboardText=workspaceCollection.accessKeys.key2
+    class="btn btn-primary"
+  }}
+    Copy Key2
+  {{/copy-button}}
+</p>
+
+
+<h3>Generate Provision Token:</h3>
+<button type="button" class="btn btn-primary" {{action "generateProvisionToken" workspaceCollection (route-action "generateProvisionToken" (hash workspaceCollection=workspaceCollection))  }}>Get Provision Token</button>
+<div class="panel panel-default">
+  <div class="panel-heading">Provision Tokens:</div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Token</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each workspaceCollection.tokens as |token|}}
+        <tr>
+          <td class="text-wrap">{{token}}</td>
+          <td>{{#copy-button clipboardText=token class="btn btn-primary" }}Copy{{/copy-button}}</td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="2" class="text-center text-danger">No Tokens Created</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<h3>Create new Workspace:</h3>
+<button type="button" class="btn btn-success" {{action (route-action "createWorkspace" (hash workspaceCollection=workspaceCollection)) }}>Create new Workspace</button>
+

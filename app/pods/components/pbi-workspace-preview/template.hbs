@@ -1,0 +1,30 @@
+<h3>Generate Dev Token</h3>
+<div class="panel panel-default">
+  <div class="panel-heading">Dev Tokens:</div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Token</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each workspace.tokens as |token|}}
+        <tr>
+          <td class="text-wrap">{{token}}</td>
+          <td>{{#copy-button clipboardText=token class="btn btn-primary" }}Copy{{/copy-button}}</td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="2" class="text-center text-danger">No Tokens Created</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<button type="button" class="btn btn-primary" {{action "generateDevToken" workspace (route-action "generateDevToken" (hash workspaceCollection=workspace.workspaceCollection workspace=workspace))  }}>Get Dev Token</button>
+
+
+<h3>4. Upload a Report</h3>
+{{#pbix-file-upload workspaceCollection=workspace.workspaceCollection workspace=workspace}}{{/pbix-file-upload}}
