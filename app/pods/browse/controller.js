@@ -197,7 +197,7 @@ export default Ember.Controller.extend({
   sessionAccount: Ember.inject.service('session-account'),
 
   searchInput: null,
-  selectedNode: null,
+  selectedTreeNode: null,
   selectedItem: null,
   subscriptions: null,
   subscriptionNodes: computed('subscriptions.@each', function () {
@@ -223,8 +223,8 @@ export default Ember.Controller.extend({
     }));
   },
 
-  fuzzySearchResults: computed('searchInput', 'selectedNode.nodes.@each', function () {
-    const nodes = this.get('selectedNode.nodes');
+  fuzzySearchResults: computed('searchInput', 'selectedTreeNode.nodes.@each', function () {
+    const nodes = this.get('selectedTreeNode.nodes');
     if(!nodes || nodes.length === 0) {
       return [];
     }
@@ -246,7 +246,7 @@ export default Ember.Controller.extend({
     },
 
     selectNode(node) {
-      this.set('selectedNode', node);
+      this.set('selectedTreeNode', node);
     },
 
     selectItem(item) {
@@ -255,7 +255,7 @@ export default Ember.Controller.extend({
 
     doubleClickItem(node) {
       node.set('expanded', true);
-      this.set('selectedNode', node);
+      this.set('selectedTreeNode', node);
     },
 
     searchEscapePressed() {
@@ -268,7 +268,7 @@ export default Ember.Controller.extend({
       if(fuzzySearchResults.length > 0) {
         const firstNode = fuzzySearchResults.get('firstObject.original');
         firstNode.set('expanded', true);
-        this.set('selectedNode', firstNode);
+        this.set('selectedTreeNode', firstNode);
         this.set('searchInput', null);
       }
     }

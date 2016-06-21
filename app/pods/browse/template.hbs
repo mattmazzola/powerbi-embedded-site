@@ -49,16 +49,16 @@
       <div class="pbi-explorer__tree">
         <ul class="tree">
           {{#each subscriptionNodes as |node|}}
-            {{pbi-node node=node onSingleClick=(action 'selectNode') selectedNode=selectedNode }}
+            {{pbi-node node=node onSingleClick=(action 'selectNode') selectedNode=selectedTreeNode }}
           {{else}}
             <li>No Subscriptions</li>
           {{/each}}
         </ul>
       </div>
       <div class="pbi-explorer__currentlist">
-        {{#if selectedNode}}
-          {{#if (gt selectedNode.nodes.length 0)}}
-            <b>{{component selectedNode.nodes.firstObject.headersComponentName}}</b>
+        {{#if selectedTreeNode}}
+          {{#if (gt selectedTreeNode.nodes.length 0)}}
+            <b>{{component selectedTreeNode.nodes.firstObject.headersComponentName}}</b>
           {{/if}}
           <ul class="pbi-selected-node-list">
             {{#each fuzzySearchResults as |fuzzySearchResult|}}
